@@ -3,7 +3,6 @@
     "TCC_WEB": {
       "commandName": "Project",
       "launchBrowser": true,
-      "launchUrl": "Carros",
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development"
       },

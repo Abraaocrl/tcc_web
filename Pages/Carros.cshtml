@@ -39,14 +39,6 @@
                                     <th>Ações</th>
                                 </tr>
                             </thead>
-                            <tfoot>
-                                <tr>
-                                    <th>Placa</th>
-                                    <th>Nº Passageiros</th>
-                                    <th>Motorista</th>
-                                    <th>Ações</th>
-                                </tr>
-                            </tfoot>
                         </table>
                     </div>
                     <!-- /.card-body -->
@@ -59,3 +51,25 @@
     </div>
     <!-- /.container-fluid -->
 </section>
+
+@section Scripts{
+    <script type="text/javascript">
+        $(document).ready(() => {
+            $.ajax({
+                url: environment.api_url + "/Carro",
+                contentType: "application/json",
+                success: (data) => {
+                    $('#tabela-carros').DataTable({
+                        data: data,
+                        columns: [
+                            { data: "placa" },
+                            { data: "passageiros" },
+                            { data: "motorista.nome" },
+                            { data: "id" },
+                        ]
+                    });
+                }
+            })
+        })
+    </script>
+}

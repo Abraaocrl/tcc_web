@@ -81,10 +81,10 @@
                         string pageRoute = ViewContext.RouteData.Values["page"].ToString() ?? string.Empty;
 
                         List<string> paginasDados = new List<string>{
-                            "/Carros",
-                            "/Motoristas",
-                            "/Rotas"
-                        };
+                    "/Carros",
+                    "/Motoristas",
+                    "/Rotas"
+                    };
 
                         bool isMenuDados = paginasDados.Contains(pageRoute);
                     }
@@ -102,19 +102,19 @@
                             </a>
                             <ul class="nav nav-treeview">
                                 <li class="nav-item">
-                                    <a href="../tables/simple.html" class="nav-link active">
+                                    <a href="../Carros" class="nav-link @(pageRoute.Equals("/Carros") ? "active" : string.Empty)">
                                         <i class="far fa-circle nav-icon"></i>
                                         <p>Carros</p>
                                     </a>
                                 </li>
                                 <li class="nav-item">
-                                    <a href="../tables/data.html" class="nav-link">
+                                    <a href="../tables/data.html" class="nav-link @(pageRoute.Equals("/Motoristas") ? "active" : string.Empty)">
                                         <i class="far fa-circle nav-icon"></i>
                                         <p>Motoristas</p>
                                     </a>
                                 </li>
                                 <li class="nav-item">
-                                    <a href="../tables/jsgrid.html" class="nav-link">
+                                    <a href="../tables/jsgrid.html" class="nav-link @(pageRoute.Equals("/Rotas") ? "active" : string.Empty)">
                                         <i class="far fa-circle nav-icon"></i>
                                         <p>Rotas</p>
                                     </a>
@@ -152,20 +152,69 @@
     <script src="../../lib/jquery/jquery.min.js"></script>
     <!-- Bootstrap 4 -->
     <script src="../../lib/bootstrap/js/bootstrap.bundle.min.js"></script>
+    <!-- Datatables -->
+    <script src="../../lib/datatables/jquery.datatables.js"></script>
     <!-- overlayScrollbars -->
     <script src="../../lib/overlayScrollbars/js/jquery.overlayScrollbars.min.js"></script>
     <!-- AdminLTE App -->
     <script src="../../js/adminlte.min.js"></script>
 
+    <script type="text/javascript">
+        const environment = {
+            api_url: "http://localhost:39389/api"
+        }
+
+        function NavegarParaHome() {
+            window.location.replace("../Home");
+        }
+
+        function NavegarParaLogin() {
+            window.location.replace("../");
+        }
+        $(document).ready(() => {
+            const token = localStorage["token"];
+            debugger;
+            if (!token) {
+                NavegarParaLogin();
+            }
+
+            $.ajax({
+                type: "POST",
+                dataType: 'json',
+                contentType: 'application/json',
+                url: environment.api_url + "@Resource.urlValidarToken",
+                data: JSON.stringify(token),
+                success: function (data) {
+                    console.log("massa");
+                },
+                error: () => {
+                    localStorage.removeItem("token")
+                    NavegarParaLogin();
+                }
+            });
+
+            $.ajaxSetup({
+                headers: {
+                    Authorization: "Bearer " + token,
+                },
+                error: () => {
+                    debugger;
+                },
+                statusCode: {
+                    403: function (responseObject, textStatus, jqXHR) {
+                        localStorage.removeItem("token")
+                        NavegarParaLogin();
+                    },
+                    401: function (responseObject, textStatus, jqXHR) {
+                        localStorage.removeItem("token")
+                        NavegarParaLogin();
+                    }
+                }
+            });
+        });
+
+    </script>
+
     @await RenderSectionAsync("Scripts", required: false)
 </body>
 </html>
-
-@section Scripts{
-    <script type="text/javascript">
-
-    </script>
-}
-
-
-
