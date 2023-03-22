@@ -32,9 +32,41 @@
                     </div>
                     <!-- /.card-header -->
                     <div class="card-body">
-
+                        <div class="row">
+                            <div class="col-9">
+                                <label for="placa">Placa</label>
+                            </div>
+                             <div class="col-3">
+                                <label for="num-passageiros">Nº Passageiros</label>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-9">
+                                <input type="text" id="placa" class="form-control"/>
+                            </div>
+                            <div class="col-3">
+                                <input type="number" id="num-passageiros" class="form-control" />
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-12">
+                                <label for="motorista">Motorista</label>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-12">
+                                <select class="select2 form-control" id="motorista"></select>
+                            </div>
+                        </div>
                     </div>
                     <!-- /.card-body -->
+                    <div class="card-footer">
+                        <div class="row">
+                            <div class="col-2 offset-10">
+                                <button class="btn btn-success" id="salvar"><i class="fas fa-check"></i> Salvar</button>
+                            </div>
+                        </div>
+                    </div>
                 </div>
                 <!-- /.card -->
             </div>
@@ -46,9 +78,9 @@
 </section>
 
 @section Scripts{
-    <script type="text/javascript">
-        $(document).ready(() => {
+<script type="text/javascript">
+    $(document).ready(() => {
 
-        })
-    </script>
+    })
+</script>
 }
