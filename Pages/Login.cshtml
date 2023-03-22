@@ -123,7 +123,6 @@
                 url: environment.api_url + "@Resource.urlLogin",
                 data: JSON.stringify(login),
                 success: function (data) {
-                    debugger;
                     localStorage["token"] = data.token;
 
                     NavegarParaHome();

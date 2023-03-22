@@ -11,6 +11,8 @@
     <link rel="stylesheet" href="../../lib/fontawesome-free/css/all.min.css">
     <!-- overlayScrollbars -->
     <link rel="stylesheet" href="../../lib/overlayScrollbars/css/OverlayScrollbars.min.css">
+    <!-- SweetAlert2 -->
+    <link rel="stylesheet" href="../../lib/sweetalert2/sweetalert2.css">
     <!-- Theme style -->
     <link rel="stylesheet" href="../../css/adminlte.min.css">
 </head>
@@ -54,11 +56,8 @@
             <div class="sidebar">
                 <!-- Sidebar user (optional) -->
                 <div class="user-panel mt-3 pb-3 mb-3 d-flex">
-                    <div class="image">
-                        <img src="../../img/user2-160x160.jpg" class="img-circle elevation-2" alt="User Image">
-                    </div>
                     <div class="info">
-                        <a href="#" class="d-block">Alexander Pierce</a>
+                        <a id="link-usuario" href="/Configuracoes" class="d-block">Alexander Pierce</a>
                     </div>
                 </div>
 
@@ -86,7 +85,7 @@
                     "/Rotas"
                     };
 
-                        bool isMenuDados = paginasDados.Contains(pageRoute);
+                        bool isMenuDados = paginasDados.Any(rota => pageRoute.StartsWith(rota));
                     }
 
                     <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
@@ -102,19 +101,19 @@
                             </a>
                             <ul class="nav nav-treeview">
                                 <li class="nav-item">
-                                    <a href="../Carros" class="nav-link @(pageRoute.Equals("/Carros") ? "active" : string.Empty)">
+                                    <a href="/Carros" class="nav-link @(pageRoute.Contains("/Carros") ? "active" : string.Empty)">
                                         <i class="far fa-circle nav-icon"></i>
                                         <p>Carros</p>
                                     </a>
                                 </li>
                                 <li class="nav-item">
-                                    <a href="../tables/data.html" class="nav-link @(pageRoute.Equals("/Motoristas") ? "active" : string.Empty)">
+                                    <a href="../tables/data.html" class="nav-link @(pageRoute.Contains("/Motoristas") ? "active" : string.Empty)">
                                         <i class="far fa-circle nav-icon"></i>
                                         <p>Motoristas</p>
                                     </a>
                                 </li>
                                 <li class="nav-item">
-                                    <a href="../tables/jsgrid.html" class="nav-link @(pageRoute.Equals("/Rotas") ? "active" : string.Empty)">
+                                    <a href="../tables/jsgrid.html" class="nav-link @(pageRoute.Contains("/Rotas") ? "active" : string.Empty)">
                                         <i class="far fa-circle nav-icon"></i>
                                         <p>Rotas</p>
                                     </a>
@@ -154,6 +153,8 @@
     <script src="../../lib/bootstrap/js/bootstrap.bundle.min.js"></script>
     <!-- Datatables -->
     <script src="../../lib/datatables/jquery.datatables.js"></script>
+    <!-- SweetAlert2 -->
+    <script src="../../lib/sweetalert2/sweetalert2.js"></script>
     <!-- overlayScrollbars -->
     <script src="../../lib/overlayScrollbars/js/jquery.overlayScrollbars.min.js"></script>
     <!-- AdminLTE App -->
@@ -173,7 +174,6 @@
         }
         $(document).ready(() => {
             const token = localStorage["token"];
-            debugger;
             if (!token) {
                 NavegarParaLogin();
             }
@@ -185,7 +185,7 @@
                 url: environment.api_url + "@Resource.urlValidarToken",
                 data: JSON.stringify(token),
                 success: function (data) {
-                    console.log("massa");
+                    $("#link-usuario").text(data.usuario);
                 },
                 error: () => {
                     localStorage.removeItem("token")
