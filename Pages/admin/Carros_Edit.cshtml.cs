@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 
 namespace TCC_WEB.Pages
 {
-    public class LoginModel : PageModel
+    public class Carros_EditModel : PageModel
     {
         public void OnGet()
         {

@@ -1,4 +1,4 @@
-﻿@page "/Carros"
+﻿@page "/admin/Carros"
 @model CarrosModel
 @{
     ViewData["Title"] = "Carros";
@@ -109,8 +109,10 @@
                             {
                                 data: "id",
                                 render: function (data, type) {
+                                    let url = "@(Model.UriCarrosEdicaoPage)".replace("0",data);
+
                                     if (type === "display") {
-                                        return "<a class='btn btn-sm btn-warning' href='../Carros/Edicao/" + data + "'><i class='fas fa-edit' ></i> Editar</a> <button class='btn btn-sm btn-danger' onClick='ExcluirCarro(" + data + ")'><i class='fas fa-trash'></i> Excluir</button>";
+                                        return "<a class='btn btn-sm btn-warning' href='" + url + "'><i class='fas fa-edit' ></i> Editar</a> <button class='btn btn-sm btn-danger' onClick='ExcluirCarro(" + data + ")'><i class='fas fa-trash'></i> Excluir</button>";
                                     }
 
                                     return data;

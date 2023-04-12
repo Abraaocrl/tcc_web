@@ -1,5 +1,5 @@
-﻿@page "/Carros/Edicao/{id}"
-@model TCC_WEB.Pages.Carros.Carros_EditModel
+﻿@page "/admin/Carros/Edicao/{id}"
+@model Carros_EditModel
 @{
     ViewData["Title"] = "Carros";
     ViewData["Header"] = "Edição";
@@ -14,7 +14,7 @@
             <div class="col-sm-6">
                 <ol class="breadcrumb float-sm-right">
                     <li class="breadcrumb-item"><a href="#">Home</a></li>
-                    <li class="breadcrumb-item "><a href="/Carros">@ViewData["Title"]</a></li>
+                    <li class="breadcrumb-item "><a asp-page="/admin/Carros/Carros">@ViewData["Title"]</a></li>
                     <li class="breadcrumb-item active">@ViewData["Header"]</li>
                 </ol>
             </div>
@@ -63,7 +63,7 @@
                     <div class="card-footer">
                         <div class="row">
                             <div class="col-2 offset-10">
-                                <button class="btn btn-success" id="salvar"><i class="fas fa-check"></i> Salvar</button>
+                                <button class="btn btn-block btn-success" id="salvar"><i class="fas fa-check"></i> Salvar</button>
                             </div>
                         </div>
                     </div>

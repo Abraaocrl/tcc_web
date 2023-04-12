@@ -1,9 +1,9 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 
-namespace TCC_WEB.Pages.Carros
+namespace TCC_WEB.Pages.Rotas
 {
-    public class Carros_EditModel : PageModel
+    public class RotasModel : PageModel
     {
         public void OnGet()
         {

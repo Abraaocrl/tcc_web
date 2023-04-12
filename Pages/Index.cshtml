@@ -1,0 +1,144 @@
+﻿@page
+@model TCC_WEB.Pages.IndexModel
+@{
+    ViewData["Title"] = "TCCWeb";
+    Layout = null;
+}
+
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>@ViewData["Title"]</title>
+
+    <!-- Google Font: Source Sans Pro -->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="~/lib/fontawesome-free/css/all.min.css">
+    <!-- icheck bootstrap -->
+    <link rel="stylesheet" href="~/lib/icheck-bootstrap/icheck-bootstrap.min.css">
+    <!-- Select2 -->
+    <link rel="stylesheet" href="~/lib/select2/css/select2.css" />
+    <!-- Theme style -->
+    <link rel="stylesheet" href="~/css/adminlte.min.css">
+</head>
+<body class="hold-transition login-page">
+    <div class="container">
+        <div class="row pt-5 pb-5">
+            <div class="col-12 text-center">
+                <h1><strong>TCC</strong>Web</h1>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-6">
+                <div class="form-group">
+                    <label for="cidade-origem">Onde você está?</label>
+                    <select class="form-control select2" id="cidade-origem"></select>
+                </div>
+            </div>
+            <div class="col-6">
+                <div class="form-group">
+                    <label for="cidade-destino">Para onde você quer ir?</label>
+                    <select class="form-control select2" id="cidade-destino"></select>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-12">
+                <button class="btn btn-primary btn-block" id="procurar-rotas" onclick="CarregarRotas()"><i class="fas fa-search"></i> Procurar</button>
+            </div>
+        </div>
+        <div class="row pt-3">
+            <div class="col-12">
+                <table id="tabela-rotas-disponiveis" class="table table-bordered table-striped">
+                    <thead>
+                        <tr>
+                            <th>Início</th>
+                            <th>Chegada</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    <!-- /.login-box -->
+    <!-- jQuery -->
+    <script src="~/lib/jquery/jquery.min.js"></script>
+    <!-- Bootstrap 4 -->
+    <script src="~/lib/bootstrap/js/bootstrap.bundle.min.js"></script>
+    <!-- AdminLTE App -->
+    <script src="~/js/adminlte.min.js"></script>
+    <!-- Select2 -->
+    <script src="~/lib/select2/js/select2.js"></script>
+    <!-- Funções úteis -->
+    <script src="~/js/site.js"></script>
+
+    <script type="text/javascript">
+        const environment = {
+            api_url: "http://localhost:39389/api"
+        }
+    </script>
+
+    <script type="text/javascript">
+        function CarregarCidades() {
+            $.ajax({
+                url: environment.api_url + "/Cidade",
+                contentType: "application/json",
+                success: (data) => {
+                    let opcoes = "<option value=null>--</option>";
+
+                    data.forEach((cidade, indice) => {
+                        let opcao = `<option value=${cidade.id}>${cidade.nome}</option>`;
+
+                        opcoes += opcao;
+                    });
+
+                    $("#cidade-origem").html(opcoes);
+                    $("#cidade-destino").html(opcoes);
+                }
+            })
+        }
+
+        function CarregarRotas() {
+            let idCidadeOrigem = $("#cidade-origem").select2('data')[0].id;
+            let idCidadeDestino = $("#cidade-destino").select2('data')[0].id;
+
+
+            $.ajax({
+                url: `${environment.api_url}/Rota/${idCidadeOrigem}/${idCidadeDestino}`,
+                contentType: "application/json",
+                success: (data) => {
+                    $("#tabela-rotas-disponiveis>tbody").html("")
+                    let arrayLength = data.length;
+                    let htmlTabela = "";
+                    data.forEach((item, index) => {
+                        if (index < arrayLength - 1) {
+                            let horarioMillisec = Date.parse(item.horario);
+                            let horario = new Date(horarioMillisec);
+                            let horaHorario = horario.getUTCHours();
+                            let horaMinuto = (horario.getUTCMinutes() < 10 ? '0' : '') + horario.getUTCMinutes();
+                            htmlTabela += `<tr><td>${item.rotaParada.cidade.nome}/${item.rotaParada.cidade.estado} - <strong>${horaHorario}:${horaMinuto}</strong></td>`;
+
+                            let horarioMillisecProximaParada = Date.parse(data[index + 1].horario);
+                            let horarioProximaParada = new Date(horarioMillisecProximaParada);
+                            let horaHorarioProximaParada = horarioProximaParada.getUTCHours();
+                            let horaMinutoProximaParada = (horarioProximaParada.getUTCMinutes() < 10 ? '0' : '') + horarioProximaParada.getUTCMinutes();
+                            htmlTabela += `<td>${data[index + 1].rotaParada.cidade.nome}/${data[index + 1].rotaParada.cidade.estado} - <strong>${horaHorarioProximaParada}:${horaMinutoProximaParada}</strong></td></tr>`;
+                        }
+                    });
+                    $("#tabela-rotas-disponiveis>tbody").html(htmlTabela);
+                }
+            })
+        }
+
+        $(document).ready(() => {
+            $(".select2").select2();
+
+            CarregarCidades();
+        })
+    </script>
+</body>
+</html>

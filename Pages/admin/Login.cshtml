@@ -1,11 +1,11 @@
-﻿@page "/"
+﻿@page "/admin/Login"
 @model TCC_WEB.Pages.LoginModel
 @{
     Layout = null;
 }
 
 <!DOCTYPE html>
-<html lang="en">
+<html lang="pt-br">
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -92,14 +92,14 @@
         }
 
         function NavegarParaHome() {
-            window.location.replace("@(Models.Util.HttpRequestExtensions.BaseUrl(this.Request))Home");
+            window.location.replace("@(Model.UriHomePage)");
         }
     </script>
 
     <script type="text/javascript">
         $(document).ready(() => {
             const token = localStorage["token"];
-
+            debugger;
             if (token) {
                 NavegarParaHome();
             }

@@ -1,5 +1,5 @@
 ﻿<!DOCTYPE html>
-<html lang="en">
+<html lang="pt-br">
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -8,15 +8,15 @@
     <!-- Google Font: Source Sans Pro -->
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
     <!-- Font Awesome -->
-    <link rel="stylesheet" href="../../lib/fontawesome-free/css/all.min.css">
+    <link rel="stylesheet" href="~/lib/fontawesome-free/css/all.min.css">
     <!-- overlayScrollbars -->
-    <link rel="stylesheet" href="../../lib/overlayScrollbars/css/OverlayScrollbars.min.css">
+    <link rel="stylesheet" href="~/lib/overlayScrollbars/css/OverlayScrollbars.min.css">
     <!-- Select2 -->
-    <link rel="stylesheet" href="../../lib/select2/css/select2.css" />
+    <link rel="stylesheet" href="~/lib/select2/css/select2.css" />
     <!-- SweetAlert2 -->
-    <link rel="stylesheet" href="../../lib/sweetalert2/sweetalert2.css">
+    <link rel="stylesheet" href="~/lib/sweetalert2/sweetalert2.css">
     <!-- Theme style -->
-    <link rel="stylesheet" href="../../css/adminlte.min.css">
+    <link rel="stylesheet" href="~/css/adminlte.min.css">
 </head>
 <body class="hold-transition sidebar-mini layout-fixed">
     <!-- Site wrapper -->
@@ -29,10 +29,7 @@
                     <a class="nav-link" data-widget="pushmenu" href="#" role="button"><i class="fas fa-bars"></i></a>
                 </li>
                 <li class="nav-item d-none d-sm-inline-block">
-                    <a href="../../index3.html" class="nav-link">Home</a>
-                </li>
-                <li class="nav-item d-none d-sm-inline-block">
-                    <a href="#" class="nav-link">Contact</a>
+                    <a asp-page="/Home" class="nav-link">Home</a>
                 </li>
             </ul>
 
@@ -49,8 +46,8 @@
         <!-- Main Sidebar Container -->
         <aside class="main-sidebar sidebar-dark-primary elevation-4">
             <!-- Brand Logo -->
-            <a href="../../index3.html" class="brand-link">
-                <img src="../../img/AdminLTELogo.png" alt="AdminLTE Logo" class="brand-image img-circle elevation-3" style="opacity: .8">
+            <a asp-page="/Home" class="brand-link">
+                <img src="~/img/AdminLTELogo.png" alt="AdminLTE Logo" class="brand-image img-circle elevation-3" style="opacity: .8">
                 <span class="brand-text font-weight-light">AdminLTE 3</span>
             </a>
 
@@ -59,7 +56,7 @@
                 <!-- Sidebar user (optional) -->
                 <div class="user-panel mt-3 pb-3 mb-3 d-flex">
                     <div class="info">
-                        <a id="link-usuario" href="/Configuracoes" class="d-block">Alexander Pierce</a>
+                        <a id="link-usuario" asp-page="/Home" class="d-block"></a>
                     </div>
                 </div>
 
@@ -103,19 +100,19 @@
                             </a>
                             <ul class="nav nav-treeview">
                                 <li class="nav-item">
-                                    <a href="/Carros" class="nav-link @(pageRoute.Contains("/Carros") ? "active" : string.Empty)">
+                                    <a asp-page="Carros" class="nav-link @(pageRoute.Contains("/Carros") ? "active" : string.Empty)">
                                         <i class="far fa-circle nav-icon"></i>
                                         <p>Carros</p>
                                     </a>
                                 </li>
                                 <li class="nav-item">
-                                    <a href="../tables/data.html" class="nav-link @(pageRoute.Contains("/Motoristas") ? "active" : string.Empty)">
+                                    <a href="~/Motoristas" class="nav-link @(pageRoute.Contains("/Motoristas") ? "active" : string.Empty)">
                                         <i class="far fa-circle nav-icon"></i>
                                         <p>Motoristas</p>
                                     </a>
                                 </li>
                                 <li class="nav-item">
-                                    <a href="../tables/jsgrid.html" class="nav-link @(pageRoute.Contains("/Rotas") ? "active" : string.Empty)">
+                                    <a href="~/Rotas" class="nav-link @(pageRoute.Contains("/Rotas") ? "active" : string.Empty)">
                                         <i class="far fa-circle nav-icon"></i>
                                         <p>Rotas</p>
                                     </a>
@@ -150,19 +147,19 @@
     </div>
     <!-- ./wrapper -->
     <!-- jQuery -->
-    <script src="../../lib/jquery/jquery.min.js"></script>
+    <script src="~/lib/jquery/jquery.min.js"></script>
     <!-- Bootstrap 4 -->
-    <script src="../../lib/bootstrap/js/bootstrap.bundle.min.js"></script>
+    <script src="~/lib/bootstrap/js/bootstrap.bundle.min.js"></script>
     <!-- Datatables -->
-    <script src="../../lib/datatables/jquery.datatables.js"></script>
+    <script src="~/lib/datatables/jquery.datatables.js"></script>
     <!-- Select2 -->
-    <script src="../../lib/select2/js/select2.js"></script>
+    <script src="~/lib/select2/js/select2.js"></script>
     <!-- SweetAlert2 -->
-    <script src="../../lib/sweetalert2/sweetalert2.js"></script>
+    <script src="~/lib/sweetalert2/sweetalert2.js"></script>
     <!-- overlayScrollbars -->
-    <script src="../../lib/overlayScrollbars/js/jquery.overlayScrollbars.min.js"></script>
+    <script src="~/lib/overlayScrollbars/js/jquery.overlayScrollbars.min.js"></script>
     <!-- AdminLTE App -->
-    <script src="../../js/adminlte.min.js"></script>
+    <script src="~/js/adminlte.min.js"></script>
 
     <script type="text/javascript">
         const environment = {
@@ -170,14 +167,16 @@
         }
 
         function NavegarParaHome() {
-            window.location.replace("../Home");
+            window.location.replace("../admin/Inicio");
         }
 
         function NavegarParaLogin() {
-            window.location.replace("../");
+            window.location.replace("../admin/Login");
         }
+
         $(document).ready(() => {
             const token = localStorage["token"];
+            debugger;
             if (!token) {
                 NavegarParaLogin();
             }
@@ -216,7 +215,6 @@
                 }
             });
         });
-
     </script>
 
     @await RenderSectionAsync("Scripts", required: false)
