@@ -20,6 +20,9 @@
     <link rel="stylesheet" href="~/lib/icheck-bootstrap/icheck-bootstrap.min.css">
     <!-- Select2 -->
     <link rel="stylesheet" href="~/lib/select2/css/select2.css" />
+    <!-- SweetAlert2 -->
+    <link rel="stylesheet" href="~/lib/sweetalert2/sweetalert2.css">
+    <link rel="stylesheet" href="~/lib/sweetalert2-theme-bootstrap-4/bootstrap-4.min.css">
     <!-- Theme style -->
     <link rel="stylesheet" href="~/css/adminlte.min.css">
 </head>
@@ -49,20 +52,50 @@
                 <button class="btn btn-primary btn-block" id="procurar-rotas" onclick="CarregarRotas()"><i class="fas fa-search"></i> Procurar</button>
             </div>
         </div>
-        <div class="row pt-3">
-            <div class="col-12">
-                <table id="tabela-rotas-disponiveis" class="table table-bordered table-striped">
-                    <thead>
-                        <tr>
-                            <th>Início</th>
-                            <th>Chegada</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                    </tbody>
-                </table>
+        <div class="card mt-5 infoRotas">
+            <div class="card-header">
+                <span class="card-title">Rota direta</span>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-12">
+                        <table id="tabela-rota-direta" class="table table-bordered table-striped">
+                            <thead>
+                                <tr>
+                                    <th>Início</th>
+                                    <th>Chegada</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
             </div>
         </div>
+        <hr class="infoRotas" />
+        <div class="card infoRotas">
+            <div class="card-header">
+                <span class="card-title">Rota completa</span>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-12">
+                        <table id="tabela-rotas-disponiveis" class="table table-bordered table-striped">
+                            <thead>
+                                <tr>
+                                    <th>Início</th>
+                                    <th>Chegada</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+
     </div>
     <!-- /.login-box -->
     <!-- jQuery -->
@@ -73,6 +106,8 @@
     <script src="~/js/adminlte.min.js"></script>
     <!-- Select2 -->
     <script src="~/lib/select2/js/select2.js"></script>
+    <!-- SweetAlert2 -->
+    <script src="~/lib/sweetalert2/sweetalert2.js"></script>
     <!-- Funções úteis -->
     <script src="~/js/site.js"></script>
 
@@ -111,30 +146,62 @@
                 url: `${environment.api_url}/Rota/${idCidadeOrigem}/${idCidadeDestino}`,
                 contentType: "application/json",
                 success: (data) => {
-                    $("#tabela-rotas-disponiveis>tbody").html("")
-                    let arrayLength = data.length;
-                    let htmlTabela = "";
-                    data.forEach((item, index) => {
-                        if (index < arrayLength - 1) {
-                            let horarioMillisec = Date.parse(item.horario);
-                            let horario = new Date(horarioMillisec);
-                            let horaHorario = horario.getUTCHours();
-                            let horaMinuto = (horario.getUTCMinutes() < 10 ? '0' : '') + horario.getUTCMinutes();
-                            htmlTabela += `<tr><td>${item.rotaParada.cidade.nome}/${item.rotaParada.cidade.estado} - <strong>${horaHorario}:${horaMinuto}</strong></td>`;
+                    CarregaTabela(data.rotaCompleta, "#tabela-rotas-disponiveis>tbody");
+                    CarregaTabela(data.rotaDireta, "#tabela-rota-direta>tbody");
 
-                            let horarioMillisecProximaParada = Date.parse(data[index + 1].horario);
-                            let horarioProximaParada = new Date(horarioMillisecProximaParada);
-                            let horaHorarioProximaParada = horarioProximaParada.getUTCHours();
-                            let horaMinutoProximaParada = (horarioProximaParada.getUTCMinutes() < 10 ? '0' : '') + horarioProximaParada.getUTCMinutes();
-                            htmlTabela += `<td>${data[index + 1].rotaParada.cidade.nome}/${data[index + 1].rotaParada.cidade.estado} - <strong>${horaHorarioProximaParada}:${horaMinutoProximaParada}</strong></td></tr>`;
-                        }
-                    });
-                    $("#tabela-rotas-disponiveis>tbody").html(htmlTabela);
+                    $(".infoRotas").show();
                 }
             })
         }
 
+        function CarregaTabela(dados, seletor) {
+            $(seletor).html("")
+            let arrayLength = dados.length;
+            let htmlTabela = "";
+            dados.forEach((item, index) => {
+                if (index < arrayLength - 1) {
+                    let horarioMillisec = Date.parse(item.horario);
+                    let horario = new Date(horarioMillisec);
+                    let horaHorario = horario.getUTCHours();
+                    let horaMinuto = (horario.getUTCMinutes() < 10 ? '0' : '') + horario.getUTCMinutes();
+                    htmlTabela += ` <tr>
+                                        <td>
+                                            <a class='btn btn-sm btn-link' target='blank' href='https://www.google.com/maps/search/?api=1&query=${item.rotaParada.latitude},${item.rotaParada.longitude}'>
+                                                <i class="fas fa-map-marker-alt"></i>
+                                            </a>
+                                                <button class='btn btn-sm btn-link' onclick="AbrirModalPreco(${item.idRotaParada},${dados[index + 1].idRotaParada})">
+                                                <i class="fas fa-money-bill-wave"></i>
+                                            </button>
+                                            ${item.rotaParada.cidade.nome}/${item.rotaParada.cidade.estado} - <strong>${horaHorario}:${horaMinuto}</strong>
+                                        </td>`;
+
+                    let horarioMillisecProximaParada = Date.parse(dados[index + 1].horario);
+                    let horarioProximaParada = new Date(horarioMillisecProximaParada);
+                    let horaHorarioProximaParada = horarioProximaParada.getUTCHours();
+                    let horaMinutoProximaParada = (horarioProximaParada.getUTCMinutes() < 10 ? '0' : '') + horarioProximaParada.getUTCMinutes();
+                    htmlTabela += `     <td>
+                                            <a class='btn btn-sm btn-link' target='blank' href='https://www.google.com/maps/search/?api=1&query=${dados[index + 1].rotaParada.latitude},${dados[index + 1].rotaParada.longitude}'>
+                                                <i class="fas fa-map-marker-alt"></i>
+                                            </a>
+                                            ${dados[index + 1].rotaParada.cidade.nome}/${dados[index + 1].rotaParada.cidade.estado} - <strong>${horaHorarioProximaParada}:${horaMinutoProximaParada}</strong>
+                                        </td>
+                                    </tr>`;
+                }
+            });
+            $(seletor).html(htmlTabela);
+        }
+
+        function AbrirModalPreco(idRotaParadaOrigem,idRotaParadaDestino){
+            Swal.fire({
+                title: 'Valor: R$ 34,50',
+                text: 'Origem -> Destino',
+                icon: 'info',
+                confirmButtonText: 'Ok'
+            })
+        }
+
         $(document).ready(() => {
+            $(".infoRotas").hide();
             $(".select2").select2();
 
             CarregarCidades();
