@@ -18,6 +18,8 @@
     <link rel="stylesheet" href="~/lib/sweetalert2-theme-bootstrap-4/bootstrap-4.min.css">
     <!-- Theme style -->
     <link rel="stylesheet" href="~/css/adminlte.min.css">
+    <!-- Time picker -->
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/timepicker/1.3.5/jquery.timepicker.min.css">
 </head>
 <body class="hold-transition sidebar-mini layout-fixed">
     <!-- Site wrapper -->
@@ -101,18 +103,6 @@
                             </a>
                             <ul class="nav nav-treeview">
                                 <li class="nav-item">
-                                    <a asp-page="Carros" class="nav-link @(pageRoute.Contains("/Carros") ? "active" : string.Empty)">
-                                        <i class="far fa-circle nav-icon"></i>
-                                        <p>Carros</p>
-                                    </a>
-                                </li>
-                                <li class="nav-item">
-                                    <a href="~/Motoristas" class="nav-link @(pageRoute.Contains("/Motoristas") ? "active" : string.Empty)">
-                                        <i class="far fa-circle nav-icon"></i>
-                                        <p>Motoristas</p>
-                                    </a>
-                                </li>
-                                <li class="nav-item">
                                     <a href="~/Rotas" class="nav-link @(pageRoute.Contains("/Rotas") ? "active" : string.Empty)">
                                         <i class="far fa-circle nav-icon"></i>
                                         <p>Rotas</p>
@@ -149,6 +139,8 @@
     <!-- ./wrapper -->
     <!-- jQuery -->
     <script src="~/lib/jquery/jquery.min.js"></script>
+    <!-- Time picker -->
+    <script src="//cdnjs.cloudflare.com/ajax/libs/timepicker/1.3.5/jquery.timepicker.min.js"></script>
     <!-- Bootstrap 4 -->
     <script src="~/lib/bootstrap/js/bootstrap.bundle.min.js"></script>
     <!-- Datatables -->

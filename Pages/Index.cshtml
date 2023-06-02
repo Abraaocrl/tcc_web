@@ -29,8 +29,9 @@
 <body class="hold-transition login-page">
     <div class="container">
         <div class="row pt-5 pb-5">
-            <div class="col-12 text-center">
-                <h1><strong>TCC</strong>Web</h1>
+            <div class="col-12 text-left">
+                <h1><strong>Via</strong>Já</h1>
+                <h3>Onde você precisa ir e aonde vai chegar</h3>
             </div>
         </div>
         <div class="row">
@@ -54,7 +55,7 @@
         </div>
         <div class="card mt-5 infoRotas">
             <div class="card-header">
-                <span class="card-title">Rota direta</span>
+                <span class="card-title">Rotas direta</span>
             </div>
             <div class="card-body">
                 <div class="row">
@@ -76,7 +77,7 @@
         <hr class="infoRotas" />
         <div class="card infoRotas">
             <div class="card-header">
-                <span class="card-title">Rota completa</span>
+                <span class="card-title">Rotas completas</span>
             </div>
             <div class="card-body">
                 <div class="row">
@@ -146,8 +147,13 @@
                 url: `${environment.api_url}/Rota/${idCidadeOrigem}/${idCidadeDestino}`,
                 contentType: "application/json",
                 success: (data) => {
-                    CarregaTabela(data.rotaCompleta, "#tabela-rotas-disponiveis>tbody");
-                    CarregaTabela(data.rotaDireta, "#tabela-rota-direta>tbody");
+                    $("#tabela-rotas-disponiveis>tbody").html("");
+                    $("#tabela-rota-direta>tbody").html("");
+                    data.forEach((rota) => {
+                        CarregaTabela(rota.rotaCompleta, "#tabela-rotas-disponiveis>tbody");
+                        CarregaTabela(rota.rotaDireta, "#tabela-rota-direta>tbody");
+
+                    })
 
                     $(".infoRotas").show();
                 }
@@ -155,9 +161,8 @@
         }
 
         function CarregaTabela(dados, seletor) {
-            $(seletor).html("")
             let arrayLength = dados.length;
-            let htmlTabela = "";
+            let htmlTabela = $(seletor).html();
             dados.forEach((item, index) => {
                 if (index < arrayLength - 1) {
                     let horarioMillisec = Date.parse(item.horario);
@@ -165,33 +170,34 @@
                     let horaHorario = horario.getUTCHours();
                     let horaMinuto = (horario.getUTCMinutes() < 10 ? '0' : '') + horario.getUTCMinutes();
                     htmlTabela += ` <tr>
-                                        <td>
-                                            <a class='btn btn-sm btn-link' target='blank' href='https://www.google.com/maps/search/?api=1&query=${item.rotaParada.latitude},${item.rotaParada.longitude}'>
-                                                <i class="fas fa-map-marker-alt"></i>
-                                            </a>
-                                                <button class='btn btn-sm btn-link' onclick="AbrirModalPreco(${item.idRotaParada},${dados[index + 1].idRotaParada})">
-                                                <i class="fas fa-money-bill-wave"></i>
-                                            </button>
-                                            ${item.rotaParada.cidade.nome}/${item.rotaParada.cidade.estado} - <strong>${horaHorario}:${horaMinuto}</strong>
-                                        </td>`;
+                                                <td>
+                                                    <a class='btn btn-sm btn-link' target='blank' href='https://www.google.com/maps/search/?api=1&query=${item.rotaParada.latitude},${item.rotaParada.longitude}'>
+                                                        <i class="fas fa-map-marker-alt"></i>
+                                                    </a>
+                                                        <button class='btn btn-sm btn-link' onclick="AbrirModalPreco(${item.idRotaParada},${dados[index + 1].idRotaParada})">
+                                                        <i class="fas fa-money-bill-wave"></i>
+                                                    </button>
+                                                    ${item.rotaParada.cidade.nome}/${item.rotaParada.cidade.estado} - <strong>${horaHorario}:${horaMinuto}</strong>
+                                                </td>`;
 
                     let horarioMillisecProximaParada = Date.parse(dados[index + 1].horario);
                     let horarioProximaParada = new Date(horarioMillisecProximaParada);
                     let horaHorarioProximaParada = horarioProximaParada.getUTCHours();
                     let horaMinutoProximaParada = (horarioProximaParada.getUTCMinutes() < 10 ? '0' : '') + horarioProximaParada.getUTCMinutes();
                     htmlTabela += `     <td>
-                                            <a class='btn btn-sm btn-link' target='blank' href='https://www.google.com/maps/search/?api=1&query=${dados[index + 1].rotaParada.latitude},${dados[index + 1].rotaParada.longitude}'>
-                                                <i class="fas fa-map-marker-alt"></i>
-                                            </a>
-                                            ${dados[index + 1].rotaParada.cidade.nome}/${dados[index + 1].rotaParada.cidade.estado} - <strong>${horaHorarioProximaParada}:${horaMinutoProximaParada}</strong>
-                                        </td>
-                                    </tr>`;
+                                                    <a class='btn btn-sm btn-link' target='blank' href='https://www.google.com/maps/search/?api=1&query=${dados[index + 1].rotaParada.latitude},${dados[index + 1].rotaParada.longitude}'>
+                                                        <i class="fas fa-map-marker-alt"></i>
+                                                    </a>
+                                                    ${dados[index + 1].rotaParada.cidade.nome}/${dados[index + 1].rotaParada.cidade.estado} - <strong>${horaHorarioProximaParada}:${horaMinutoProximaParada}</strong>
+                                                </td>
+                                            </tr>`;
                 }
             });
+            htmlTabela += ` <tr><td> - </td><td> - </td></tr>`;
             $(seletor).html(htmlTabela);
         }
 
-        function AbrirModalPreco(idRotaParadaOrigem,idRotaParadaDestino){
+        function AbrirModalPreco(idRotaParadaOrigem, idRotaParadaDestino) {
             Swal.fire({
                 title: 'Valor: R$ 34,50',
                 text: 'Origem -> Destino',

@@ -1,0 +1,201 @@
+﻿@page
+@model TCC_WEB.Pages.admin.Rotas_EditModel
+@{
+    ViewData["Title"] = "Rotas";
+    ViewData["Header"] = "Edição";
+}
+
+<section class="content-header">
+    <div class="container-fluid">
+        <div class="row mb-2">
+            <div class="col-sm-6">
+                <h1>@ViewData["Title"]</h1>
+            </div>
+            <div class="col-sm-6">
+                <ol class="breadcrumb float-sm-right">
+                    <li class="breadcrumb-item"><a href="#">Home</a></li>
+                    <li class="breadcrumb-item "><a asp-page="/admin/Rotas">@ViewData["Title"]</a></li>
+                    <li class="breadcrumb-item active">@ViewData["Header"]</li>
+                </ol>
+            </div>
+        </div>
+    </div><!-- /.container-fluid -->
+</section>
+
+<section class="content">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-header">
+                        <h3 class="card-title">Paradas</h3>
+                    </div>
+                    <!-- /.card-header -->
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-9">
+                                <label for="cidade">Cidade</label>
+                            </div>
+                            <div class="col-3">
+                                <button class="btn btn-block btn-success" id="adicionar-parada"><i class="fas fa-plus"></i> Adicionar</button>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-9">
+                                <select class="form-control select2" id="cidade"></select>
+                            </div>
+                            <div class="col-3">
+                                <input type="number" id="num-passageiros" class="form-control" />
+                            </div>
+                        </div>
+                        <hr />
+                        <table id="tabela-paradas" class="table table-bordered table-striped">
+                            <thead>
+                                <tr>
+                                    <th>Cidade</th>
+                                    <th>Ações</th>
+                                </tr>
+                            </thead>
+                        </table>
+
+                    </div>
+                    <!-- /.card-body -->
+                    <div class="card-footer">
+                        <div class="row">
+                            <div class="col-2 offset-10">
+                                <button class="btn btn-block btn-success" id="salvar"><i class="fas fa-check"></i> Salvar</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="card-header">
+                        <h3 class="card-title">Horários</h3>
+                    </div>
+                    <!-- /.card-header -->
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-6">
+                                <label for="parada">Parada</label>
+                            </div>
+                            <div class="col-3">
+                                <label for="horario">Horário da parada</label>
+                            </div>
+                            <div class="col-3">
+                                <button class="btn btn-block btn-success" id="adicionar-parada"><i class="fas fa-plus"></i> Adicionar</button>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-9">
+                                <select class="form-control select2" id="parada"></select>
+                            </div>
+                            <div class="col-3">
+                                <input type="text" id="horario" class="form-control timepicker" />
+                            </div>
+                            <div class="col-3">
+                            </div>
+                        </div>
+                        <hr />
+                        <div id="cards-paradas">
+                            <div class="card">
+                                <div class="card-header">
+                                    <span class="card-title">{cidadeParada}</span>
+                                </div>
+                                <div class="card-body">
+                                    <ul class="list-group">
+                                        <li class="list-group-item" onclick="ExcluirHorario({id})">06:00</li>
+                                        <li class="list-group-item" onclick="ExcluirHorario({id})">06:30</li>
+                                        <li class="list-group-item" onclick="ExcluirHorario({id})">07:00</li>
+                                        <li class="list-group-item" onclick="ExcluirHorario({id})">07:30</li>
+                                    </ul>
+                                </div>
+                                <div class="card-footer">
+                                    <button class="btn btn-block btn-danger" onclick="ExcluirParada({id})"><i class="fas fa-trash"></i> Excluir</button>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                    <!-- /.card-body -->
+                    <div class="card-footer">
+                        <div class="row">
+                            <div class="col-2 offset-10">
+                                <button class="btn btn-block btn-success" id="salvar"><i class="fas fa-check"></i> Salvar</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="card-header">
+                    </div>
+                    <div class="card-body">
+                        <table class="table" id="tabela-precos">
+                            <tbody>
+                                <tr>
+                                    <th>-</th>
+                                    <th>Parada 1</th>
+                                    <th>Parada 2</th>
+                                    <th>Parada 3</th>
+                                    <th>Parada 4</th>
+                                </tr>
+                                <tr>
+                                    <th>Parada 1</th>
+                                    <td onclick="ExcluirPreco({id})">R$ 10,00</td> <!--<td onclick="AbrirModalAdicionarPreco({idParada1},{idParada2})"> - </td>-->
+                                    <td onclick="ExcluirPreco({id})">R$ 10,00</td>
+                                    <td onclick="ExcluirPreco({id})">R$ 10,00</td>
+                                    <td onclick="ExcluirPreco({id})">R$ 10,00</td>
+                                </tr>
+                                <tr>
+                                    <th>Parada 2</th>
+                                    <td onclick="ExcluirPreco({id})">R$ 10,00</td>
+                                    <td onclick="ExcluirPreco({id})">R$ 10,00</td>
+                                    <td onclick="ExcluirPreco({id})">R$ 10,00</td>
+                                    <td onclick="ExcluirPreco({id})">R$ 10,00</td>
+                                </tr>
+                                <tr>
+                                    <th>Parada 3</th>
+                                    <td onclick="ExcluirPreco({id})">R$ 10,00</td>
+                                    <td onclick="ExcluirPreco({id})">R$ 10,00</td>
+                                    <td onclick="ExcluirPreco({id})">R$ 10,00</td>
+                                    <td onclick="ExcluirPreco({id})">R$ 10,00</td>
+                                </tr>
+                                <tr>
+                                    <<th>Parada 4</th>
+                                    <td onclick="ExcluirPreco({id})">R$ 10,00</td>
+                                    <td onclick="ExcluirPreco({id})">R$ 10,00</td>
+                                    <td onclick="ExcluirPreco({id})">R$ 10,00</td>
+                                    <td onclick="ExcluirPreco({id})">R$ 10,00</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                <!-- /.card -->
+            </div>
+            <!-- /.col -->
+        </div>
+        <!-- /.row -->
+    </div>
+    <!-- /.container-fluid -->
+</section>
+
+@section Scripts{
+    <script>
+        $(document).ready(() => {
+            $('.timepicker').timepicker({
+                timeFormat: 'hh:mm p',
+                interval: 30,
+                minHour: 0,
+                minMinutes: 0,
+                maxHour: 23,
+                maxMinutes: 59,
+                defaultTime: 'now',
+                startTime: '05:00',
+                dynamic: false,
+                dropdown: true,
+                scrollbar: true
+            });
+        })
+    </script>
+
+}
