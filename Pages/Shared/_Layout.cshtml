@@ -87,7 +87,7 @@
                     "/Rotas"
                     };
 
-                        bool isMenuDados = paginasDados.Any(rota => pageRoute.StartsWith(rota));
+                        bool isMenuDados = paginasDados.Any(rota => pageRoute.Contains(rota));
                     }
 
                     <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
@@ -103,7 +103,7 @@
                             </a>
                             <ul class="nav nav-treeview">
                                 <li class="nav-item">
-                                    <a href="~/Rotas" class="nav-link @(pageRoute.Contains("/Rotas") ? "active" : string.Empty)">
+                                    <a href="~/admin/Rotas" class="nav-link @(pageRoute.Contains("/Rotas") ? "active" : string.Empty)">
                                         <i class="far fa-circle nav-icon"></i>
                                         <p>Rotas</p>
                                     </a>
@@ -159,6 +159,22 @@
             api_url: "http://localhost:39389/api"
         }
 
+        function getUrlParameter(sParam) {
+            var sPageURL = window.location.search.substring(1),
+                sURLVariables = sPageURL.split('&'),
+                sParameterName,
+                i;
+
+            for (i = 0; i < sURLVariables.length; i++) {
+                sParameterName = sURLVariables[i].split('=');
+
+                if (sParameterName[0] === sParam) {
+                    return sParameterName[1] === undefined ? true : decodeURIComponent(sParameterName[1]);
+                }
+            }
+            return false;
+        }
+
         function NavegarParaHome() {
             window.location.replace("../admin/Inicio");
         }
@@ -169,7 +185,6 @@
 
         $(document).ready(() => {
             const token = localStorage["token"];
-            debugger;
             if (!token) {
                 NavegarParaLogin();
             }
@@ -193,8 +208,12 @@
                 headers: {
                     Authorization: "Bearer " + token,
                 },
-                error: () => {
-                    debugger;
+                error: (error) => {
+                    Swal.fire({
+                        title: error.responseText,
+                        icon:'error',
+                        confirmButtonText: 'Ok',
+                    })
                 },
                 statusCode: {
                     403: function (responseObject, textStatus, jqXHR) {

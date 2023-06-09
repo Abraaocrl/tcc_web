@@ -23,6 +23,7 @@
 </section>
 
 <section class="content">
+    <input type="hidden" id="idRota" />
     <div class="container-fluid">
         <div class="row">
             <div class="col-12">
@@ -33,19 +34,30 @@
                     <!-- /.card-header -->
                     <div class="card-body">
                         <div class="row">
-                            <div class="col-9">
+                            <div class="col-12 col-lg-8">
                                 <label for="cidade">Cidade</label>
                             </div>
-                            <div class="col-3">
-                                <button class="btn btn-block btn-success" id="adicionar-parada"><i class="fas fa-plus"></i> Adicionar</button>
+                            <div class="col-6 col-lg-1">
+                                <label for="lat">Latitude</label>
+                            </div>
+                            <div class="col-6 col-lg-1">
+                                <label for="lng">Longitude</label>
+                            </div>
+                            <div class="col-12 col-lg-2">
                             </div>
                         </div>
                         <div class="row">
-                            <div class="col-9">
+                            <div class="col-12 col-lg-8">
                                 <select class="form-control select2" id="cidade"></select>
                             </div>
-                            <div class="col-3">
-                                <input type="number" id="num-passageiros" class="form-control" />
+                            <div class="col-6 col-lg-1">
+                                <input type="text" class="form-control" id="lat" />
+                            </div>
+                            <div class="col-6 col-lg-1">
+                                <input type="text" class="form-control" id="lng" />
+                            </div>
+                            <div class="col-12 col-lg-2">
+                                <button class="btn btn-block btn-success" id="adicionar-parada" onclick="SalvarParada()"><i class="fas fa-plus"></i></button>
                             </div>
                         </div>
                         <hr />
@@ -53,9 +65,11 @@
                             <thead>
                                 <tr>
                                     <th>Cidade</th>
-                                    <th>Ações</th>
+                                    <th width="20%">Ações</th>
                                 </tr>
                             </thead>
+                            <tbody id="body-tabela-paradas">
+                            </tbody>
                         </table>
 
                     </div>
@@ -81,36 +95,38 @@
                             <div class="col-3">
                                 <label for="horario">Horário da parada</label>
                             </div>
-                            <div class="col-3">
-                                <button class="btn btn-block btn-success" id="adicionar-parada"><i class="fas fa-plus"></i> Adicionar</button>
-                            </div>
                         </div>
                         <div class="row">
-                            <div class="col-9">
+                            <div class="col-6">
                                 <select class="form-control select2" id="parada"></select>
                             </div>
                             <div class="col-3">
                                 <input type="text" id="horario" class="form-control timepicker" />
                             </div>
                             <div class="col-3">
+                                <button class="btn btn-block btn-success" id="adicionar-parada"><i class="fas fa-plus"></i> Adicionar</button>
                             </div>
                         </div>
                         <hr />
                         <div id="cards-paradas">
-                            <div class="card">
-                                <div class="card-header">
-                                    <span class="card-title">{cidadeParada}</span>
-                                </div>
-                                <div class="card-body">
-                                    <ul class="list-group">
-                                        <li class="list-group-item" onclick="ExcluirHorario({id})">06:00</li>
-                                        <li class="list-group-item" onclick="ExcluirHorario({id})">06:30</li>
-                                        <li class="list-group-item" onclick="ExcluirHorario({id})">07:00</li>
-                                        <li class="list-group-item" onclick="ExcluirHorario({id})">07:30</li>
-                                    </ul>
-                                </div>
-                                <div class="card-footer">
-                                    <button class="btn btn-block btn-danger" onclick="ExcluirParada({id})"><i class="fas fa-trash"></i> Excluir</button>
+                            <div class="row">
+                                <div class="col-3">
+                                    <div class="card">
+                                        <div class="card-header">
+                                            <span class="card-title">{cidadeParada}</span>
+                                        </div>
+                                        <div class="card-body">
+                                            <ul class="list-group">
+                                                <li class="list-group-item" onclick="ExcluirHorario({id})">06:00</li>
+                                                <li class="list-group-item" onclick="ExcluirHorario({id})">06:30</li>
+                                                <li class="list-group-item" onclick="ExcluirHorario({id})">07:00</li>
+                                                <li class="list-group-item" onclick="ExcluirHorario({id})">07:30</li>
+                                            </ul>
+                                        </div>
+                                        <div class="card-footer">
+                                            <button class="btn btn-block btn-danger" onclick="ExcluirParada({id})"><i class="fas fa-trash"></i> Excluir</button>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -127,6 +143,7 @@
                 </div>
                 <div class="card">
                     <div class="card-header">
+                        <h3 class="card-title">Valores</h3>
                     </div>
                     <div class="card-body">
                         <table class="table" id="tabela-precos">
@@ -160,7 +177,7 @@
                                     <td onclick="ExcluirPreco({id})">R$ 10,00</td>
                                 </tr>
                                 <tr>
-                                    <<th>Parada 4</th>
+                                    <th>Parada 4</th>
                                     <td onclick="ExcluirPreco({id})">R$ 10,00</td>
                                     <td onclick="ExcluirPreco({id})">R$ 10,00</td>
                                     <td onclick="ExcluirPreco({id})">R$ 10,00</td>
@@ -181,9 +198,87 @@
 
 @section Scripts{
     <script>
-        $(document).ready(() => {
+        var rota = null;
+        var paradas = [];
+
+        function CarregarCidades() {
+            $.ajax({
+                url: environment.api_url + "/Cidade",
+                contentType: "application/json",
+                success: (data) => {
+                    let opcoes = "<option value=null>--</option>";
+
+                    data.forEach((cidade, indice) => {
+                        let opcao = `<option value=${cidade.id}>${cidade.nome}</option>`;
+
+                        opcoes += opcao;
+                    });
+
+                    $("#cidade").html(opcoes);
+                }
+            })
+        }
+
+        function CarregarOpcoesParadas() {
+            let opcoes = "<option value=null>--</option>";
+
+            paradas.forEach((parada, indice) => {
+                let opcao = `<option value=${parada.id}>${parada.cidade.nome}</option>`;
+
+                opcoes += opcao;
+            });
+
+            $("#parada").html(opcoes);
+        }
+
+        function CarregarTabelaParadas() {
+            var template = "<tr>" +
+                "<td>{status}{cidade}" +
+                "<a class='btn btn-sm btn-link' target= 'blank' href = 'https://www.google.com/maps/search/?api=1&query={latitude},{longitude}'>" +
+                "<i class='fas fa-map-marker-alt'> </i>" +
+                "</a>" +
+                "</td>" +
+                "<td>" +
+                "<button class='btn btn-sm btn-primary' onclick= 'TornarParadaInicial({id},{idRota})' title= 'Tornar parada incial'> <i class='fas fa-play'> </i></button> " +
+                "<button class='btn btn-sm btn-secondary' onclick= 'TornarParadaFinal({id},{idRota})' title= 'Tornar parada final'> <i class='fas fa-stop'> </i></button> " +
+                "<button class='btn btn-sm btn-danger' onclick= 'ExcluirParada({id})' title= 'Excluir parada'> <i class='fas fa-trash'> </i></button> " +
+                "</td>" +
+                "</tr>";
+
+            var htmlTabela = '';
+
+            $('#body-tabela-paradas').html(htmlTabela);
+            paradas.forEach((item) => {
+                var opcao = template
+                    .replaceAll('{id}', item.id)
+                    .replaceAll('{idRota}', item.idRota)
+                    .replace('{latitude}', item.latitude)
+                    .replace('{longitude}', item.longitude)
+                    .replace('{cidade}', item.cidade.nome);
+
+                if (rota == null || rota.idRotaParadaOrigem == null || rota.idRotaParadaDestino == null) {
+                    opcao = opcao
+                        .replace('{status}', '');
+                } else {
+                    if (item.id == rota.idRotaParadaOrigem)
+                        opcao = opcao
+                            .replace('{status}', 'INIÍCIO - ');
+                    else if (item.id == rota.idRotaParadaDestino)
+                        opcao = opcao
+                            .replace('{status}', 'FINAL - ');
+                    else
+                        opcao = opcao
+                            .replace('{status}', '');
+                }
+                htmlTabela += opcao;
+            })
+
+            $('#body-tabela-paradas').html(htmlTabela);
+        }
+
+        function ConfigurarInputs() {
             $('.timepicker').timepicker({
-                timeFormat: 'hh:mm p',
+                timeFormat: 'HH:mm',
                 interval: 30,
                 minHour: 0,
                 minMinutes: 0,
@@ -195,6 +290,132 @@
                 dropdown: true,
                 scrollbar: true
             });
+
+            $('.select2').select2();
+        }
+
+        function CarregarParadas() {
+            let idRota = $("#idRota").val();
+
+            $.ajax({
+                url: environment.api_url + "/RotaParada/rota/" + idRota,
+                method: 'get',
+                contentType: 'application/json',
+                success: (data) => {
+                    paradas = [];
+
+                    data.forEach((item) => {
+                        paradas.push(item);
+                    });
+
+                    CarregarTabelaParadas();
+                    CarregarOpcoesParadas();
+                }
+            })
+        }
+
+        function CarregarRota() {
+            let idRota = $("#idRota").val();
+
+            $.ajax({
+                url: environment.api_url + "/Rota/" + idRota,
+                method: 'get',
+                contentType: 'application/json',
+                success: (data) => {
+                    rota = data;
+                }
+            })
+        }
+
+        function LimparInputs() {
+            $("#cidade").val(null).trigger('change');
+            $("#lat").val(null).trigger('change');
+            $("#lng").val(null).trigger('change');
+        }
+
+        function SalvarParada() {
+            let idCidade = $("#cidade").select2('data')[0].id;
+            let idRota = $("#idRota").val();
+            let latitude = $("#lat").val();
+            let longitude = $("#lng").val();
+
+            var novaParada = {
+                idCidade: idCidade,
+                idRota: idRota,
+                latitude: latitude,
+                longitude: longitude,
+                horarios: []
+            };
+
+            $.ajax({
+                url: environment.api_url + "/RotaParada",
+                method: 'post',
+                contentType: 'application/json',
+                data: JSON.stringify(novaParada),
+                success: function (data) {
+                    LimparInputs();
+                    CarregarParadas();
+                }
+            })
+        }
+
+        function TornarParadaInicial(id, idRota) {
+            $.ajax({
+                url: environment.api_url + "/Rota/setParadaInicial/" + `${id}/${idRota}`,
+                method: 'Post',
+                success: (data) => {
+                    CarregarRota();
+
+                    CarregarTabelaParadas();
+                }
+            })
+        }
+
+        function TornarParadaFinal(id, idRota) {
+            $.ajax({
+                url: environment.api_url + "/Rota/setParadaFinal/" + `${id}/${idRota}`,
+                method: 'Post',
+                success: (data) => {
+                    CarregarRota();
+
+                    CarregarTabelaParadas();
+                }
+            })
+        }
+
+        function ExcluirParada(id) {
+            Swal.fire({
+                title: 'Deseja excluir a parada?',
+                showDenyButton: true,
+                showCancelButton: false,
+                confirmButtonText: 'Sim',
+                denyButtonText: 'Não'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    ConfirmarExclusaoParada(id);
+                }
+            })
+        }
+
+        function ConfirmarExclusaoParada(id) {
+            $.ajax({
+                method: "DELETE",
+                url: environment.api_url + "/RotaParada/" + id,
+                contentType: "application/json",
+                success: (data) => {
+                    Swal.fire('Parada excluída!', '', 'info');
+                    CarregarParadas()
+                }
+            });
+        }
+
+        $(document).ready(() => {
+            $('#idRota').val(getUrlParameter('id'));
+
+            ConfigurarInputs();
+            CarregarCidades();
+            CarregarRota();
+            CarregarParadas();
         })
     </script>
 
