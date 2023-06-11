@@ -24,6 +24,7 @@
                     <div class="card">
                         <div class="card-header">
                             <h3 class="card-title">Listagem</h3>
+                            <button class="btn btn-sm btn-primary" onclick="CriarRota()"><i class="fas fa-plus"></i> Criar Rota</button>
                         </div>
                         <!-- /.card-header -->
                         <div class="card-body">
@@ -52,7 +53,7 @@
         <script type="text/javascript">
             function AtualizarDadosTabela() {
                 $.ajax({
-                    url: environment.api_url + "/Rotas",
+                    url: environment.api_url + "/Rota",
                     contentType: "application/json",
                     success: (data) => {
                         let datatable = $('#tabela-rotas').DataTable();

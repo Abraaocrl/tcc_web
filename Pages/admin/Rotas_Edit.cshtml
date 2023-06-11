@@ -104,30 +104,12 @@
                                 <input type="text" id="horario" class="form-control timepicker" />
                             </div>
                             <div class="col-3">
-                                <button class="btn btn-block btn-success" id="adicionar-parada"><i class="fas fa-plus"></i> Adicionar</button>
+                                <button class="btn btn-block btn-success" id="adicionar-horario" onclick="SalvarHorario()"><i class="fas fa-plus"></i> Adicionar</button>
                             </div>
                         </div>
                         <hr />
                         <div id="cards-paradas">
-                            <div class="row">
-                                <div class="col-3">
-                                    <div class="card">
-                                        <div class="card-header">
-                                            <span class="card-title">{cidadeParada}</span>
-                                        </div>
-                                        <div class="card-body">
-                                            <ul class="list-group">
-                                                <li class="list-group-item" onclick="ExcluirHorario({id})">06:00</li>
-                                                <li class="list-group-item" onclick="ExcluirHorario({id})">06:30</li>
-                                                <li class="list-group-item" onclick="ExcluirHorario({id})">07:00</li>
-                                                <li class="list-group-item" onclick="ExcluirHorario({id})">07:30</li>
-                                            </ul>
-                                        </div>
-                                        <div class="card-footer">
-                                            <button class="btn btn-block btn-danger" onclick="ExcluirParada({id})"><i class="fas fa-trash"></i> Excluir</button>
-                                        </div>
-                                    </div>
-                                </div>
+                            <div class="row" id="horarios-paradas">
                             </div>
                         </div>
 
@@ -276,15 +258,56 @@
             $('#body-tabela-paradas').html(htmlTabela);
         }
 
+        function CarregarCardHorarios() {
+            const templateCard = '<div class="col-3">' +
+                '   <div class="card">' +
+                '       <div class="card-header">' +
+                '           <span class="card-title">{cidadeParada}</span>' +
+                '       </div>' +
+                '       <div class="card-body">' +
+                '           <ul class="list-group">' +
+                '             {horariosParada}' +
+                '           </ul>' +
+                '       </div>' +
+                '       <div class="card-footer">' +
+                '           <button class="btn btn-block btn-danger" onclick="ExcluirHorariosParada({id})"><i class="fas fa-trash"></i> Excluir todos</button>' +
+                '       </div>' +
+                '   </div>' +
+                '</div>';
+            const templateHorario = '<li class="list-group-item" onclick="ExcluirHorario({idHorario})">{horario}</li>';
+
+            let htmlCardsParadas = '';
+
+            $('#horarios-paradas').html(htmlCardsParadas);
+
+            paradas.forEach((parada) => {
+                let cardParada = templateCard.replace('{cidadeParada}', parada.cidade.nome).replaceAll('{id}', parada.id);
+
+                let htmlHorarios = '';
+
+                if (parada.horarios != null) {
+                    parada.horarios.forEach((horario) => {
+                        htmlHorarios += templateHorario.replace('{idHorario}', horario.id).replace('{horario}', new Date(horario.horario.slice(0, -1)).toLocaleTimeString('pt-BR'))
+                    })
+                }
+
+                cardParada = cardParada.replace('{horariosParada}', htmlHorarios);
+
+                htmlCardsParadas += cardParada
+            });
+
+            $('#horarios-paradas').html(htmlCardsParadas);
+        }
+
         function ConfigurarInputs() {
             $('.timepicker').timepicker({
                 timeFormat: 'HH:mm',
-                interval: 30,
+                interval: 10,
                 minHour: 0,
                 minMinutes: 0,
                 maxHour: 23,
                 maxMinutes: 59,
-                defaultTime: 'now',
+                defaultTime: new Date(0, 0, 0, 5, 0, 0),
                 startTime: '05:00',
                 dynamic: false,
                 dropdown: true,
@@ -314,6 +337,32 @@
             })
         }
 
+        function CarregarHorarios() {
+            let idRota = $("#idRota").val();
+
+            $.ajax({
+                url: environment.api_url + "/RotaParadaHorarios/rota/" + idRota,
+                method: 'get',
+                contentType: 'application/json',
+                success: (data) => {
+                    paradas.forEach((parada) => {
+                        parada.horarios = null;
+                    })
+
+                    data.forEach((item) => {
+                        let horarios = item;
+                        let idParadaGrupo = horarios[0].idRotaParada;
+
+                        let indexParadaComId = paradas.map(parada => parada.id).indexOf(idParadaGrupo);
+
+                        paradas[indexParadaComId].horarios = horarios;
+                    });
+
+                    CarregarCardHorarios();
+                }
+            })
+        }
+
         function CarregarRota() {
             let idRota = $("#idRota").val();
 
@@ -331,6 +380,8 @@
             $("#cidade").val(null).trigger('change');
             $("#lat").val(null).trigger('change');
             $("#lng").val(null).trigger('change');
+            $("#parada").val(null).trigger('change');
+            $("#horario").val(null).trigger('change');
         }
 
         function SalvarParada() {
@@ -355,6 +406,33 @@
                 success: function (data) {
                     LimparInputs();
                     CarregarParadas();
+                }
+            })
+        }
+
+        function SalvarHorario() {
+            let idRotaParada = $("#parada").select2('data')[0].id;
+            let horarioComFuso = $("#horario").timepicker().getTime();
+
+            const localOffset = horarioComFuso.getTimezoneOffset();
+            let horario = new Date(horarioComFuso.getTime() - (localOffset) * 60000);
+
+            var novoHorairo = {
+                idRotaParada: idRotaParada,
+                horarioBruto: horario,
+                horario: horario.toISOString()
+            };
+
+            console.log(novoHorairo);
+
+            $.ajax({
+                url: environment.api_url + "/RotaParadaHorarios",
+                method: 'post',
+                contentType: 'application/json',
+                data: JSON.stringify(novoHorairo),
+                success: function (data) {
+                    LimparInputs();
+                    CarregarHorarios();
                 }
             })
         }
@@ -409,6 +487,43 @@
             });
         }
 
+        function ExcluirHorariosParada(id) {
+            Swal.fire({
+                title: 'Deseja excluir todos os horários da parada?',
+                showDenyButton: true,
+                showCancelButton: false,
+                confirmButtonText: 'Sim',
+                denyButtonText: 'Não'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    ConfirmarExclusaoHorariosParada(id);
+                }
+            })
+        }
+
+        function ConfirmarExclusaoHorariosParada(id) {
+            $.ajax({
+                method: "DELETE",
+                url: environment.api_url + "/RotaParadaHorarios/RotaParada/" + id,
+                contentType: "application/json",
+                success: (data) => {
+                    Swal.fire('Horários excluídos!', '', 'info');
+                    CarregarHorarios();
+                }
+            });
+        }
+
+        function ExcluirHorario(id) {
+            $.ajax({
+                method: "DELETE",
+                url: environment.api_url + "/RotaParadaHorarios/" + id,
+                contentType: "application/json",
+                success: (data) => {
+                    CarregarHorarios();
+                }
+            });
+        }
+
         $(document).ready(() => {
             $('#idRota').val(getUrlParameter('id'));
 
@@ -416,6 +531,7 @@
             CarregarCidades();
             CarregarRota();
             CarregarParadas();
+            CarregarHorarios();
         })
     </script>
 
