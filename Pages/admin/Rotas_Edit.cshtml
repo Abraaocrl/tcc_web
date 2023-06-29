@@ -129,43 +129,6 @@
                     </div>
                     <div class="card-body">
                         <table class="table" id="tabela-precos">
-                            <tbody>
-                                <tr>
-                                    <th>-</th>
-                                    <th>Parada 1</th>
-                                    <th>Parada 2</th>
-                                    <th>Parada 3</th>
-                                    <th>Parada 4</th>
-                                </tr>
-                                <tr>
-                                    <th>Parada 1</th>
-                                    <td onclick="ExcluirPreco({id})">R$ 10,00</td> <!--<td onclick="AbrirModalAdicionarPreco({idParada1},{idParada2})"> - </td>-->
-                                    <td onclick="ExcluirPreco({id})">R$ 10,00</td>
-                                    <td onclick="ExcluirPreco({id})">R$ 10,00</td>
-                                    <td onclick="ExcluirPreco({id})">R$ 10,00</td>
-                                </tr>
-                                <tr>
-                                    <th>Parada 2</th>
-                                    <td onclick="ExcluirPreco({id})">R$ 10,00</td>
-                                    <td onclick="ExcluirPreco({id})">R$ 10,00</td>
-                                    <td onclick="ExcluirPreco({id})">R$ 10,00</td>
-                                    <td onclick="ExcluirPreco({id})">R$ 10,00</td>
-                                </tr>
-                                <tr>
-                                    <th>Parada 3</th>
-                                    <td onclick="ExcluirPreco({id})">R$ 10,00</td>
-                                    <td onclick="ExcluirPreco({id})">R$ 10,00</td>
-                                    <td onclick="ExcluirPreco({id})">R$ 10,00</td>
-                                    <td onclick="ExcluirPreco({id})">R$ 10,00</td>
-                                </tr>
-                                <tr>
-                                    <th>Parada 4</th>
-                                    <td onclick="ExcluirPreco({id})">R$ 10,00</td>
-                                    <td onclick="ExcluirPreco({id})">R$ 10,00</td>
-                                    <td onclick="ExcluirPreco({id})">R$ 10,00</td>
-                                    <td onclick="ExcluirPreco({id})">R$ 10,00</td>
-                                </tr>
-                            </tbody>
                         </table>
                     </div>
                 </div>
@@ -174,6 +137,43 @@
             <!-- /.col -->
         </div>
         <!-- /.row -->
+
+        <div class="modal" tabindex="-1" role="dialog" id="ModalPrecoRota">
+            <input type="hidden" id="idRotaParadaOrigem" />
+            <input type="hidden" id="idRotaParadaDestino" />
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">Dados do trajeto <span id="trajeto-escolhido"></span></h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Fechar">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="row">
+                            <div class="col-12 col-lg-6">
+                                <label for="distancia">Distância</label>
+                            </div>
+                            <div class="col-12 col-lg-6">
+                                <label for="preco">Preço</label>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-12 col-lg-6">
+                                <input type="text" class="form-control" id="distancia" />
+                            </div>
+                            <div class="col-12 col-lg-6">
+                                <input type="text" class="form-control" id="preco" />
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Fechar</button>
+                        <button type="button" class="btn btn-primary" onclick="SalvarPreco()">Criar</button>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
     <!-- /.container-fluid -->
 </section>
@@ -182,6 +182,7 @@
     <script>
         var rota = null;
         var paradas = [];
+        var precos = [];
 
         function CarregarCidades() {
             $.ajax({
@@ -299,6 +300,80 @@
             $('#horarios-paradas').html(htmlCardsParadas);
         }
 
+        function AbrirModalAdicionarPreco(idOrigem, idDestino) {
+            var paradaOrigem = paradas.find((item) => item.id == idOrigem);
+            var paradaDestino = paradas.find((item) => item.id == idDestino);
+
+            $("#trajeto-escolhido").html(paradaOrigem.cidade.nome + " -> " + paradaDestino.cidade.nome)
+
+            var preco = precos.find((item) => item.idRotaParadaOrigem == idOrigem && item.idRotaParadaDestino == idDestino);
+
+            $('#idRotaParadaOrigem').val(idOrigem);
+            $('#idRotaParadaDestino').val(idDestino);
+
+            if (preco != undefined) {
+                $('#preco').val(preco.preco.replace('R$ ',''));
+                $('#distancia').val(preco.distancia.replace('R$ ',''));
+            }else{
+                $('#preco').val(null);
+                $('#distancia').val(null);
+            }
+
+            $('#ModalPrecoRota').modal('toggle');
+        }
+
+        function CarregarTabelaPrecos() {
+            const templateBody = '<tbody><tr>{rowHeadersPrecos}</tr>{rowsParadas}</tbody>';
+            const templateHeaderParada = "<th>{cidade}</th>";
+            const templatePreco = '<td onclick="AbrirModalAdicionarPreco({idParadaOrigem},{idParadaDestino})">{preco}</td>';
+            const templateRow = '<tr>{columns}</tr>';
+
+            paradas.sort((a, b) => {
+                let fa = a.id,
+                    fb = b.id
+
+                if (fa < fb) {
+                    return -1;
+                }
+                if (fa > fb) {
+                    return 1;
+                }
+                return 0;
+            })
+
+
+            let htmlHeader = templateHeaderParada.replace('{cidade}', '-');
+
+            paradas.forEach((item) => {
+                htmlHeader += templateHeaderParada.replace('{cidade}', item.cidade.nome);
+            })
+
+            let htmlRows = '';
+            for (let i = 0; i < paradas.length; i++) {
+                let columnsParada = templateHeaderParada.replace('{cidade}', paradas[i].cidade.nome);
+                for (let j = 0; j < paradas.length; j++) {
+                    let indexPrecoDestino = precos.findIndex((item) => item.idRotaParadaOrigem == paradas[i].id && item.idRotaParadaDestino == paradas[j].id);
+                    if (indexPrecoDestino > -1) {
+                        let precoTrajeto = precos[indexPrecoDestino]
+
+                        columnsParada += templatePreco
+                            .replace('{idParadaOrigem}', precoTrajeto.idRotaParadaOrigem)
+                            .replace('{idParadaDestino}', precoTrajeto.idRotaParadaDestino)
+                            .replace('{preco}', j <= i ? precoTrajeto.distancia + " Km" : precoTrajeto.preco)
+                    } else {
+                        columnsParada += templatePreco
+                            .replace('{idParadaOrigem}', paradas[i].id)
+                            .replace('{idParadaDestino}', paradas[j].id)
+                            .replace('{preco}', j == i ? '-' : (j <= i ? '0,00 km' : 'R$ 0,00'))
+                    }
+                }
+                htmlRows += templateRow.replace('{columns}', columnsParada);
+            }
+
+            $('#tabela-precos').html(templateBody.replace('{rowHeadersPrecos}', htmlHeader).replace('{rowsParadas}', htmlRows));
+            $('#tabela-precos td').css('cursor', 'pointer');
+        }
+
         function ConfigurarInputs() {
             $('.timepicker').timepicker({
                 timeFormat: 'HH:mm',
@@ -333,6 +408,7 @@
 
                     CarregarTabelaParadas();
                     CarregarOpcoesParadas();
+                    CarregarPrecos();
                 }
             })
         }
@@ -341,7 +417,7 @@
             let idRota = $("#idRota").val();
 
             $.ajax({
-                url: environment.api_url + "/RotaParadaHorarios/rota/" + idRota,
+                url: environment.api_url + "/RotaParadaHorarios/Rota/" + idRota,
                 method: 'get',
                 contentType: 'application/json',
                 success: (data) => {
@@ -363,6 +439,25 @@
             })
         }
 
+        function CarregarPrecos() {
+            let idRota = $("#idRota").val();
+
+            $.ajax({
+                url: environment.api_url + "/RotaPreco/Rota/" + idRota,
+                method: 'get',
+                contentType: 'application/json',
+                success: (data) => {
+                    precos = [];
+
+                    data.forEach((item) => {
+                        precos.push(item);
+                    });
+
+                    CarregarTabelaPrecos();
+                }
+            })
+        }
+
         function CarregarRota() {
             let idRota = $("#idRota").val();
 
@@ -372,6 +467,36 @@
                 contentType: 'application/json',
                 success: (data) => {
                     rota = data;
+                }
+            })
+        }
+
+        function SalvarPreco() {
+            let idRota = $("#idRota").val();
+
+            var idRotaParadaOrigem = $('#idRotaParadaOrigem').val();
+            var idRotaParadaDestino = $('#idRotaParadaDestino').val();
+
+            var preco = $('#preco').val().replaceAll('.','').replace(',','.');
+            var distancia = $('#distancia').val().replaceAll('.', '').replace(',', '.');;
+
+            var rotaPreco = {
+                idRota: idRota,
+                idRotaParadaOrigem: idRotaParadaOrigem,
+                idRotaParadaDestino: idRotaParadaDestino,
+                preco: preco,
+                distancia: distancia
+            };
+
+            $.ajax({
+                url: environment.api_url + "/RotaPreco",
+                method: 'post',
+                contentType: 'application/json',
+                data: JSON.stringify(rotaPreco),
+                success: function (data) {
+                    $('#ModalPrecoRota').modal('toggle');
+
+                    CarregarPrecos();
                 }
             })
         }

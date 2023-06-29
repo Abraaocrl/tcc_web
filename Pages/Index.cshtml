@@ -55,7 +55,7 @@
         </div>
         <div class="card mt-5 infoRotas">
             <div class="card-header">
-                <span class="card-title">Rotas direta</span>
+                <span class="card-title">Rotas diretas</span>
             </div>
             <div class="card-body">
                 <div class="row">
@@ -198,11 +198,18 @@
         }
 
         function AbrirModalPreco(idRotaParadaOrigem, idRotaParadaDestino) {
-            Swal.fire({
-                title: 'Valor: R$ 34,50',
-                text: 'Origem -> Destino',
-                icon: 'info',
-                confirmButtonText: 'Ok'
+            $.ajax({
+                url: environment.api_url + "/RotaPreco/Pontos/" + idRotaParadaOrigem +"/"+idRotaParadaDestino,
+                method: 'get',
+                contentType: 'application/json',
+                success: (data) => {
+                    Swal.fire({
+                        title: `Valor: ${data.preco}`,
+                        text: `${data.origem} -> ${data.distancia}km -> ${data.destino}`,
+                        icon: 'info',
+                        confirmButtonText: 'Ok'
+                    })
+                }
             })
         }
 
