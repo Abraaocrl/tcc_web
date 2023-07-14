@@ -1,7 +1,9 @@
 ﻿@page "/admin/Login"
 @model TCC_WEB.Pages.LoginModel
+@inject IConfiguration Configuration
 @{
     Layout = null;
+    var apiUrl = Configuration.GetValue<string>("ConnectionStrings:ApiUrl");
 }
 
 <!DOCTYPE html>
@@ -81,7 +83,7 @@
 
     <script type="text/javascript">
         const environment = {
-            api_url: "http://localhost:39389/api"
+            api_url: "@apiUrl"
         }
 
         function NavegarParaHome() {

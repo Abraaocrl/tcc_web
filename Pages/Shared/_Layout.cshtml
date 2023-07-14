@@ -1,4 +1,10 @@
-﻿<!DOCTYPE html>
+﻿@inject IConfiguration Configuration
+
+@{
+    var apiUrl = Configuration.GetValue<string>("ConnectionStrings:ApiUrl");
+}
+
+<!DOCTYPE html>
 <html lang="pt-br">
 <head>
     <meta charset="utf-8">
@@ -148,7 +154,7 @@
 
     <script type="text/javascript">
         const environment = {
-            api_url: "http://localhost:39389/api"
+            api_url: "@apiUrl"
         }
 
         function getUrlParameter(sParam) {

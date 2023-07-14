@@ -1,8 +1,10 @@
 ﻿@page
 @model TCC_WEB.Pages.IndexModel
+@inject IConfiguration Configuration
 @{
-    ViewData["Title"] = "TCCWeb";
+    ViewData["Title"] = "ViaJá!";
     Layout = null;
+    var apiUrl = Configuration.GetValue<string>("ConnectionStrings:ApiUrl");
 }
 
 <!DOCTYPE html>
@@ -30,7 +32,7 @@
     <div class="container">
         <div class="row pt-5 pb-5">
             <div class="col-12 text-left">
-                <h1><strong>Via</strong>Já</h1>
+                <h1><strong>Via</strong>Já!</h1>
                 <h3>Onde você precisa ir e aonde vai chegar</h3>
             </div>
         </div>
@@ -114,7 +116,7 @@
 
     <script type="text/javascript">
         const environment = {
-            api_url: "http://localhost:39389/api"
+            api_url: "@apiUrl"
         }
     </script>
 
