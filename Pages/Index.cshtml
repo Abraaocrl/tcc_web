@@ -32,8 +32,9 @@
     <!-- Theme style -->
     <link rel="stylesheet" href="~/css/adminlte.min.css">
 
+    <link rel="stylesheet" href="~/css/index.css" />
 </head>
-<body >
+<body>
     <section id="header" class="p-5 text-white" style="background-color:midnightblue">
         <div class="row pb-5">
             <div class="col-12 text-left ">
@@ -61,6 +62,62 @@
         </div>
     </section>
     <div class="container mt-5">
+        <div class="row mb-3">
+            <div class="col-md-4">
+                <button class="btn btn-sm btn-info btn-block" type="button" data-bs-toggle="collapse" data-bs-target="#cardSobre" aria-controls="cardSobre" aria-expanded="false">Sobre</button>
+            </div>
+            <div class="col-md-4">
+                <button class="btn btn-sm btn-info btn-block" type="button" data-bs-toggle="collapse" data-bs-target="#cardAvalie" aria-controls="cardAvalie" aria-expanded="false">Avalie</button>
+            </div>
+            <div class="col-md-4">
+                <button class="btn btn-sm btn-info btn-block" type="button" data-bs-toggle="collapse" data-bs-target="#cardDesenvolvedor" aria-controls="cardDesenvolvedor" aria-expanded="false">Desenvolvedor</button>
+            </div>
+        </div>
+        <div class="collapse multi-collapse" id="cardSobre">
+            <div class="card">
+                <div class="card-header">
+                    <h3 class="card-header">Sobre</h3>
+                </div>
+                <div class="card-body">
+                    <p> O ViaJá é um aplicativo Web que visa informar passageiros de transporte intermunicipal por topics sobre os horários, valores e locais de embarque dos veículos.</p>
+                    <p> Este aplicativo foi desenvolvido com o intuito de servir como trabalho de conclusão de curso(TCC).</p>
+                    <p>
+                        O aplicativo não tem qualquer ligação com cooperativas de
+                        transporte intermunicipal do estado do Ceará e todas as informações foram obtidas por meio de entrevista com motoristas. Os dados podem apresentar impreciões ou estarem incompletos.
+                    </p>
+                </div>
+            </div>
+        </div>
+        <div class="collapse multi-collapse" id="cardAvalie">
+            <div class="card">
+                <div class="card-header">
+                    <h3 class="card-header">Avaliação</h3>
+                </div>
+                <div class="card-body">
+                    <p>Ao final do uso do aplicativo, por favor, avalie a aplicação! É um processo rápido e irá me ajudar bastante!</p>
+                    <p>Para avaliar, entre no formulário <a href="https://docs.google.com/forms/d/13PXZ6ak3rjx44E3EVo1aa7QfKHNA47blD0IHojzPRD0/edit" target="_blank">clicando aqui.</a></p>
+                </div>
+            </div>
+        </div>
+        <div class="collapse multi-collapse" id="cardDesenvolvedor">
+            <div class="card ">
+                <div class="card-header">
+                    <h3 class="card-header">Desenvolvedor</h3>
+                </div>
+                <div class="card-body">
+                    <p>
+                        Olá! Primeiramente, fico muito agradecido por estar recebendo sua visita neste site e espero que goste da ferramenta. Me chamo Abraão Costa, sou sobralense e atualmente, aluno da graduação
+                        de engenharia da computação pela Universidade Federal do Ceará (UFC). Comecei a programar no início da graduação e atualmente trabalho como desenvolvedor fullstack. Vocês podem me encontrar nas
+                        seguintes redes sociais para ficarem atentos aos futuros projetos!
+                    </p>
+                    <a href="https://github.com/abraaocrl" target="_blank" style="font-size:2em;"><i class="fab fa-github"></i></a>
+                    <a href="https://www.linkedin.com/in/abraaocrl/" target="_blank" style="font-size:2em;"><i class="fab fa-linkedin"></i></a>
+                </div>
+            </div>
+        </div>
+
+        <div class="loader mt-5" style="display:none;"></div>
+
         <div class="card mt-5 infoRotas">
             <div class="card-header">
                 <span class="card-title">Rota direta</span>
@@ -104,59 +161,7 @@
                 </div>
             </div>
         </div>
-        <div class="row mb-3">
-            <div class="col-md-4">
-                <button class="btn btn-sm btn-info btn-block" type="button" data-bs-toggle="collapse" data-bs-target="#cardSobre" aria-controls="cardSobre" aria-expanded="false">Sobre</button>
-            </div>
-            <div class="col-md-4">
-                <button class="btn btn-sm btn-info btn-block" type="button" data-bs-toggle="collapse" data-bs-target="#cardAvalie" aria-controls="cardAvalie" aria-expanded="false">Avalie</button>
-            </div>
-            <div class="col-md-4">
-                <button class="btn btn-sm btn-info btn-block" type="button" data-bs-toggle="collapse" data-bs-target="#cardDesenvolvedor" aria-controls="cardDesenvolvedor" aria-expanded="false">Desenvolvedor</button>
-            </div>
-        </div>
-        <div class="collapse multi-collapse" id="cardSobre">
-            <div class="card" >
-            <div class="card-header">
-                <h3 class="card-header">Sobre</h3>
-            </div>
-            <div class="card-body">
-                <p> O ViaJá é um aplicativo Web que visa informar passageiros de transporte intermunicipal por topics sobre os horários, valores e locais de embarque dos veículos.</p>
-                <p> Este aplicativo foi desenvolvido com o intuito de servir como trabalho de conclusão de curso(TCC).</p>
-                <p>
-                    O aplicativo não tem qualquer ligação com cooperativas de
-                    transporte intermunicipal do estado do Ceará e todas as informações foram obtidas por meio de entrevista com motoristas. Os dados podem apresentar impreciões ou estarem incompletos.
-                </p>
-            </div>
-        </div>
-        </div>
-         <div class="collapse multi-collapse" id="cardAvalie">
-            <div class="card" >
-                <div class="card-header">
-                    <h3 class="card-header">Avaliação</h3>
-                </div>
-                <div class="card-body">
-                    <p>Ao final do uso do aplicativo, por favor, avalie a aplicação! É um processo rápido e irá me ajudar bastante!</p>
-                    <p>Para avaliar, entre no formulário <a href="https://docs.google.com/forms/d/13PXZ6ak3rjx44E3EVo1aa7QfKHNA47blD0IHojzPRD0/edit" target="_blank">clicando aqui.</a></p>
-                </div>
-            </div>
-        </div>
-        <div class="collapse multi-collapse" id="cardDesenvolvedor">
-            <div class="card ">
-                <div class="card-header">
-                    <h3 class="card-header">Desenvolvedor</h3>
-                </div>
-                <div class="card-body">
-                    <p>
-                        Olá! Primeiramente, fico muito agradecido por estar recebendo sua visita neste site e espero que goste da ferramenta. Me chamo Abraão Costa, sou sobralense e atualmente, aluno da graduação
-                        de engenharia da computação pela Universidade Federal do Ceará (UFC). Comecei a programar no início da graduação e atualmente trabalho como desenvolvedor fullstack. Vocês podem me encontrar nas
-                        seguintes redes sociais para ficarem atentos aos futuros projetos!
-                    </p>
-                    <a href="https://github.com/abraaocrl" target="_blank" style="font-size:2em;"><i class="fab fa-github"></i></a>
-                    <a href="https://www.linkedin.com/in/abraaocrl/" target="_blank" style="font-size:2em;"><i class="fab fa-linkedin"></i></a>
-                </div>
-            </div>
-        </div>
+
     </div>
     <!-- /.login-box -->
     <!-- jQuery -->
@@ -219,12 +224,15 @@
         function CarregarRotas() {
             let idCidadeOrigem = $("#cidade-origem").select2('data')[0].id;
             let idCidadeDestino = $("#cidade-destino").select2('data')[0].id;
-
+            $('.loader').show();
+            $(".infoRotas").hide();
 
             $.ajax({
                 url: `${environment.api_url}/Rota/${idCidadeOrigem}/${idCidadeDestino}`,
                 contentType: "application/json",
                 success: (data) => {
+                    $('.loader').hide();
+
                     if (data.length == 0) {
                         Swal.fire({
                             title: "Nenhuma rota encontrada",
@@ -252,6 +260,7 @@
                         icon: 'error',
                         confirmButtonText: 'Ok',
                     })
+                    $('.loader').hide();
                 }
             })
         }
@@ -266,27 +275,27 @@
                     let horaHorario = horario.getUTCHours();
                     let horaMinuto = (horario.getUTCMinutes() < 10 ? '0' : '') + horario.getUTCMinutes();
                     htmlTabela += ` <tr>
-                                                                                <td>
-                                                                                    <a class='btn btn-sm btn-link' target='blank' href='https://www.google.com/maps/search/?api=1&query=${item.rotaParada.latitude},${item.rotaParada.longitude}'>
-                                                                                        <i class="fas fa-map-marker-alt"></i>
-                                                                                    </a>
-                                                                                        <button class='btn btn-sm btn-link' onclick="AbrirModalPreco(${item.idRotaParada},${dados[index + 1].idRotaParada})">
-                                                                                        <i class="fas fa-money-bill-wave"></i>
-                                                                                    </button>
-                                                                                    ${item.rotaParada.cidade.nome}/${item.rotaParada.cidade.estado} - <strong>${horaHorario}:${horaMinuto}</strong>
-                                                                                </td>`;
+                                                                                        <td>
+                                                                                            <a class='btn btn-sm btn-link' target='blank' href='https://www.google.com/maps/search/?api=1&query=${item.rotaParada.latitude},${item.rotaParada.longitude}'>
+                                                                                                <i class="fas fa-map-marker-alt"></i>
+                                                                                            </a>
+                                                                                                <button class='btn btn-sm btn-link' onclick="AbrirModalPreco(${item.idRotaParada},${dados[index + 1].idRotaParada})">
+                                                                                                <i class="fas fa-money-bill-wave"></i>
+                                                                                            </button>
+                                                                                            ${item.rotaParada.cidade.nome}/${item.rotaParada.cidade.estado} - <strong>${horaHorario}:${horaMinuto}</strong>
+                                                                                        </td>`;
 
                     let horarioMillisecProximaParada = Date.parse(dados[index + 1].horario);
                     let horarioProximaParada = new Date(horarioMillisecProximaParada);
                     let horaHorarioProximaParada = horarioProximaParada.getUTCHours();
                     let horaMinutoProximaParada = (horarioProximaParada.getUTCMinutes() < 10 ? '0' : '') + horarioProximaParada.getUTCMinutes();
                     htmlTabela += `     <td>
-                                                                                    <a class='btn btn-sm btn-link' target='blank' href='https://www.google.com/maps/search/?api=1&query=${dados[index + 1].rotaParada.latitude},${dados[index + 1].rotaParada.longitude}'>
-                                                                                        <i class="fas fa-map-marker-alt"></i>
-                                                                                    </a>
-                                                                                    ${dados[index + 1].rotaParada.cidade.nome}/${dados[index + 1].rotaParada.cidade.estado} - <strong>${horaHorarioProximaParada}:${horaMinutoProximaParada}</strong>
-                                                                                </td>
-                                                                            </tr>`;
+                                                                                            <a class='btn btn-sm btn-link' target='blank' href='https://www.google.com/maps/search/?api=1&query=${dados[index + 1].rotaParada.latitude},${dados[index + 1].rotaParada.longitude}'>
+                                                                                                <i class="fas fa-map-marker-alt"></i>
+                                                                                            </a>
+                                                                                            ${dados[index + 1].rotaParada.cidade.nome}/${dados[index + 1].rotaParada.cidade.estado} - <strong>${horaHorarioProximaParada}:${horaMinutoProximaParada}</strong>
+                                                                                        </td>
+                                                                                    </tr>`;
                 }
             });
             htmlTabela += ` <tr><td> - </td><td> - </td></tr>`;
@@ -300,21 +309,21 @@
                 contentType: 'application/json',
                 success: (data) => {
 
-                    if(idRotaParadaDestino == idRotaParadaOrigem){
+                    if (idRotaParadaDestino == idRotaParadaOrigem) {
                         Swal.fire({
-                             title: "Embarque indisponível",
+                            title: "Embarque indisponível",
                             text: "Este trajeto representa apenas um tempo de ociosidade.",
                             icon: 'info',
                             confirmButtonText: 'Ok',
                         })
-                    }else if(data.preco == 0){
+                    } else if (data.preco == 0) {
                         Swal.fire({
-                             title: "Embarque indisponível",
+                            title: "Embarque indisponível",
                             text: "No trajeto selecionado, não é permitido embarque de passageiros, apenas o desembarque!",
                             icon: 'info',
                             confirmButtonText: 'Ok',
                         })
-                    }else{
+                    } else {
                         Swal.fire({
                             title: `Valor: R$ ${formattedNumber(parseFloat(data.preco))}`,
                             text: `${data.origem} -> ${data.distancia}km -> ${data.destino}`,
