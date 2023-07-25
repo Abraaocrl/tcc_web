@@ -14,6 +14,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>@ViewData["Title"]</title>
 
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+
+    @*Ícone*@
+    <link rel="icon" href="~/img/icon.png" type="image/png">
     <!-- Google Font: Source Sans Pro -->
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
     <!-- Font Awesome -->
@@ -27,37 +31,39 @@
     <link rel="stylesheet" href="~/lib/sweetalert2-theme-bootstrap-4/bootstrap-4.min.css">
     <!-- Theme style -->
     <link rel="stylesheet" href="~/css/adminlte.min.css">
+
 </head>
-<body class="hold-transition login-page">
-    <div class="container">
-        <div class="row pt-5 pb-5">
-            <div class="col-12 text-left">
-                <h1><strong>Via</strong>Já!</h1>
+<body >
+    <section id="header" class="p-5 text-white" style="background-color:midnightblue">
+        <div class="row pb-5">
+            <div class="col-12 text-left ">
+                <h1><strong>Via</strong>Já! <i class="fas fa-shuttle-van"></i></h1>
                 <h3>Onde você precisa ir e aonde vai chegar</h3>
             </div>
         </div>
-        <div class="row">
-            <div class="col-6">
+        <div class="row text-white">
+            <div class="col-12 col-md-5">
                 <div class="form-group">
                     <label for="cidade-origem">Onde você está?</label>
                     <select class="form-control select2" id="cidade-origem"></select>
                 </div>
             </div>
-            <div class="col-6">
+            <div class="col-12 col-md-5">
                 <div class="form-group">
                     <label for="cidade-destino">Para onde você quer ir?</label>
                     <select class="form-control select2" id="cidade-destino"></select>
                 </div>
             </div>
-        </div>
-        <div class="row">
-            <div class="col-12">
-                <button class="btn btn-primary btn-block" id="procurar-rotas" onclick="CarregarRotas()"><i class="fas fa-search"></i> Procurar</button>
+            <div class="col-12 col-md-2">
+                <label>&nbsp;</label>
+                <button class="btn btn-success btn-block" id="procurar-rotas" onclick="CarregarRotas()"><i class="fas fa-search"></i> Procurar</button>
             </div>
         </div>
+    </section>
+    <div class="container mt-5">
         <div class="card mt-5 infoRotas">
             <div class="card-header">
-                <span class="card-title">Rotas diretas</span>
+                <span class="card-title">Rota direta</span>
             </div>
             <div class="card-body">
                 <div class="row">
@@ -79,7 +85,7 @@
         <hr class="infoRotas" />
         <div class="card infoRotas">
             <div class="card-header">
-                <span class="card-title">Rotas completas</span>
+                <span class="card-title">Rota completa</span>
             </div>
             <div class="card-body">
                 <div class="row">
@@ -98,13 +104,65 @@
                 </div>
             </div>
         </div>
-
+        <div class="row mb-3">
+            <div class="col-md-4">
+                <button class="btn btn-sm btn-info btn-block" type="button" data-bs-toggle="collapse" data-bs-target="#cardSobre" aria-controls="cardSobre" aria-expanded="false">Sobre</button>
+            </div>
+            <div class="col-md-4">
+                <button class="btn btn-sm btn-info btn-block" type="button" data-bs-toggle="collapse" data-bs-target="#cardAvalie" aria-controls="cardAvalie" aria-expanded="false">Avalie</button>
+            </div>
+            <div class="col-md-4">
+                <button class="btn btn-sm btn-info btn-block" type="button" data-bs-toggle="collapse" data-bs-target="#cardDesenvolvedor" aria-controls="cardDesenvolvedor" aria-expanded="false">Desenvolvedor</button>
+            </div>
+        </div>
+        <div class="collapse multi-collapse" id="cardSobre">
+            <div class="card" >
+            <div class="card-header">
+                <h3 class="card-header">Sobre</h3>
+            </div>
+            <div class="card-body">
+                <p> O ViaJá é um aplicativo Web que visa informar passageiros de transporte intermunicipal por topics sobre os horários, valores e locais de embarque dos veículos.</p>
+                <p> Este aplicativo foi desenvolvido com o intuito de servir como trabalho de conclusão de curso(TCC).</p>
+                <p>
+                    O aplicativo não tem qualquer ligação com cooperativas de
+                    transporte intermunicipal do estado do Ceará e todas as informações foram obtidas por meio de entrevista com motoristas. Os dados podem apresentar impreciões ou estarem incompletos.
+                </p>
+            </div>
+        </div>
+        </div>
+         <div class="collapse multi-collapse" id="cardAvalie">
+            <div class="card" >
+                <div class="card-header">
+                    <h3 class="card-header">Avaliação</h3>
+                </div>
+                <div class="card-body">
+                    <p>Ao final do uso do aplicativo, por favor, avalie a aplicação! É um processo rápido e irá me ajudar bastante!</p>
+                    <p>Para avaliar, entre no formulário <a href="https://docs.google.com/forms/d/13PXZ6ak3rjx44E3EVo1aa7QfKHNA47blD0IHojzPRD0/edit" target="_blank">clicando aqui.</a></p>
+                </div>
+            </div>
+        </div>
+        <div class="collapse multi-collapse" id="cardDesenvolvedor">
+            <div class="card ">
+                <div class="card-header">
+                    <h3 class="card-header">Desenvolvedor</h3>
+                </div>
+                <div class="card-body">
+                    <p>
+                        Olá! Primeiramente, fico muito agradecido por estar recebendo sua visita neste site e espero que goste da ferramenta. Me chamo Abraão Costa, sou sobralense e atualmente, aluno da graduação
+                        de engenharia da computação pela Universidade Federal do Ceará (UFC). Comecei a programar no início da graduação e atualmente trabalho como desenvolvedor fullstack. Vocês podem me encontrar nas
+                        seguintes redes sociais para ficarem atentos aos futuros projetos!
+                    </p>
+                    <a href="https://github.com/abraaocrl" target="_blank" style="font-size:2em;"><i class="fab fa-github"></i></a>
+                    <a href="https://www.linkedin.com/in/abraaocrl/" target="_blank" style="font-size:2em;"><i class="fab fa-linkedin"></i></a>
+                </div>
+            </div>
+        </div>
     </div>
     <!-- /.login-box -->
     <!-- jQuery -->
     <script src="~/lib/jquery/jquery.min.js"></script>
-    <!-- Bootstrap 4 -->
-    <script src="~/lib/bootstrap/js/bootstrap.bundle.min.js"></script>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
     <!-- AdminLTE App -->
     <script src="~/js/adminlte.min.js"></script>
     <!-- Select2 -->
@@ -121,9 +179,18 @@
     </script>
 
     <script type="text/javascript">
+        const formattedNumber = (number) => {
+            return number.toLocaleString('pt-BR', {
+                style: 'decimal',
+                minimumFractionDigits: 2,
+                maximumFractionDigits: 2,
+            });
+        }
+
         function CarregarCidades() {
             $.ajax({
                 url: environment.api_url + "/Cidade",
+                dataType: "json",
                 contentType: "application/json",
                 success: (data) => {
                     let opcoes = "<option value=null>--</option>";
@@ -136,6 +203,15 @@
 
                     $("#cidade-origem").html(opcoes);
                     $("#cidade-destino").html(opcoes);
+                },
+                error: (err) => {
+                    console.log(err);
+                    Swal.fire({
+                        title: "Erro na listagem de cidades!",
+                        text: "Tente novamente mais tarde.",
+                        icon: 'error',
+                        confirmButtonText: 'Ok',
+                    })
                 }
             })
         }
@@ -149,6 +225,16 @@
                 url: `${environment.api_url}/Rota/${idCidadeOrigem}/${idCidadeDestino}`,
                 contentType: "application/json",
                 success: (data) => {
+                    if (data.length == 0) {
+                        Swal.fire({
+                            title: "Nenhuma rota encontrada",
+                            text: "É possível que a rota que procura ainda não tenha sido adicionada ao nosso banco de dados! Entre em contato com o desenvolvedor.",
+                            icon: 'info',
+                            confirmButtonText: 'Ok',
+                        })
+                        return;
+                    }
+
                     $("#tabela-rotas-disponiveis>tbody").html("");
                     $("#tabela-rota-direta>tbody").html("");
                     data.forEach((rota) => {
@@ -158,6 +244,14 @@
                     })
 
                     $(".infoRotas").show();
+                },
+                error: (err) => {
+                    Swal.fire({
+                        title: "Erro na busca por rotas!",
+                        text: "Cerifique-se de escolher origem e destino antes de fazer a busca!",
+                        icon: 'error',
+                        confirmButtonText: 'Ok',
+                    })
                 }
             })
         }
@@ -166,33 +260,33 @@
             let arrayLength = dados.length;
             let htmlTabela = $(seletor).html();
             dados.forEach((item, index) => {
-                if (index < arrayLength - 1) {
+                if (index < arrayLength - 1 && (item.idRotaParada != dados[index + 1].idRotaParada)) {
                     let horarioMillisec = Date.parse(item.horario);
                     let horario = new Date(horarioMillisec);
                     let horaHorario = horario.getUTCHours();
                     let horaMinuto = (horario.getUTCMinutes() < 10 ? '0' : '') + horario.getUTCMinutes();
                     htmlTabela += ` <tr>
-                                                <td>
-                                                    <a class='btn btn-sm btn-link' target='blank' href='https://www.google.com/maps/search/?api=1&query=${item.rotaParada.latitude},${item.rotaParada.longitude}'>
-                                                        <i class="fas fa-map-marker-alt"></i>
-                                                    </a>
-                                                        <button class='btn btn-sm btn-link' onclick="AbrirModalPreco(${item.idRotaParada},${dados[index + 1].idRotaParada})">
-                                                        <i class="fas fa-money-bill-wave"></i>
-                                                    </button>
-                                                    ${item.rotaParada.cidade.nome}/${item.rotaParada.cidade.estado} - <strong>${horaHorario}:${horaMinuto}</strong>
-                                                </td>`;
+                                                                                <td>
+                                                                                    <a class='btn btn-sm btn-link' target='blank' href='https://www.google.com/maps/search/?api=1&query=${item.rotaParada.latitude},${item.rotaParada.longitude}'>
+                                                                                        <i class="fas fa-map-marker-alt"></i>
+                                                                                    </a>
+                                                                                        <button class='btn btn-sm btn-link' onclick="AbrirModalPreco(${item.idRotaParada},${dados[index + 1].idRotaParada})">
+                                                                                        <i class="fas fa-money-bill-wave"></i>
+                                                                                    </button>
+                                                                                    ${item.rotaParada.cidade.nome}/${item.rotaParada.cidade.estado} - <strong>${horaHorario}:${horaMinuto}</strong>
+                                                                                </td>`;
 
                     let horarioMillisecProximaParada = Date.parse(dados[index + 1].horario);
                     let horarioProximaParada = new Date(horarioMillisecProximaParada);
                     let horaHorarioProximaParada = horarioProximaParada.getUTCHours();
                     let horaMinutoProximaParada = (horarioProximaParada.getUTCMinutes() < 10 ? '0' : '') + horarioProximaParada.getUTCMinutes();
                     htmlTabela += `     <td>
-                                                    <a class='btn btn-sm btn-link' target='blank' href='https://www.google.com/maps/search/?api=1&query=${dados[index + 1].rotaParada.latitude},${dados[index + 1].rotaParada.longitude}'>
-                                                        <i class="fas fa-map-marker-alt"></i>
-                                                    </a>
-                                                    ${dados[index + 1].rotaParada.cidade.nome}/${dados[index + 1].rotaParada.cidade.estado} - <strong>${horaHorarioProximaParada}:${horaMinutoProximaParada}</strong>
-                                                </td>
-                                            </tr>`;
+                                                                                    <a class='btn btn-sm btn-link' target='blank' href='https://www.google.com/maps/search/?api=1&query=${dados[index + 1].rotaParada.latitude},${dados[index + 1].rotaParada.longitude}'>
+                                                                                        <i class="fas fa-map-marker-alt"></i>
+                                                                                    </a>
+                                                                                    ${dados[index + 1].rotaParada.cidade.nome}/${dados[index + 1].rotaParada.cidade.estado} - <strong>${horaHorarioProximaParada}:${horaMinutoProximaParada}</strong>
+                                                                                </td>
+                                                                            </tr>`;
                 }
             });
             htmlTabela += ` <tr><td> - </td><td> - </td></tr>`;
@@ -201,15 +295,40 @@
 
         function AbrirModalPreco(idRotaParadaOrigem, idRotaParadaDestino) {
             $.ajax({
-                url: environment.api_url + "/RotaPreco/Pontos/" + idRotaParadaOrigem +"/"+idRotaParadaDestino,
+                url: environment.api_url + "/RotaPreco/Pontos/" + idRotaParadaOrigem + "/" + idRotaParadaDestino,
                 method: 'get',
                 contentType: 'application/json',
                 success: (data) => {
+
+                    if(idRotaParadaDestino == idRotaParadaOrigem){
+                        Swal.fire({
+                             title: "Embarque indisponível",
+                            text: "Este trajeto representa apenas um tempo de ociosidade.",
+                            icon: 'info',
+                            confirmButtonText: 'Ok',
+                        })
+                    }else if(data.preco == 0){
+                        Swal.fire({
+                             title: "Embarque indisponível",
+                            text: "No trajeto selecionado, não é permitido embarque de passageiros, apenas o desembarque!",
+                            icon: 'info',
+                            confirmButtonText: 'Ok',
+                        })
+                    }else{
+                        Swal.fire({
+                            title: `Valor: R$ ${formattedNumber(parseFloat(data.preco))}`,
+                            text: `${data.origem} -> ${data.distancia}km -> ${data.destino}`,
+                            icon: 'info',
+                            confirmButtonText: 'Ok'
+                        })
+                    }
+                },
+                error: (error) => {
                     Swal.fire({
-                        title: `Valor: ${data.preco}`,
-                        text: `${data.origem} -> ${data.distancia}km -> ${data.destino}`,
-                        icon: 'info',
-                        confirmButtonText: 'Ok'
+                        title: "Erro na exibição do preço!",
+                        text: "Tente novamente mais tarde.",
+                        icon: 'error',
+                        confirmButtonText: 'Ok',
                     })
                 }
             })
