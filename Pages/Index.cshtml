@@ -35,7 +35,27 @@
     <link rel="stylesheet" href="~/css/index.css" />
 </head>
 <body>
-    <section id="header" class="p-5 text-white" style="background-color:midnightblue">
+    <nav class="navbar fixed-top navbar-expand-lg navbar-light bg-light" style="color:midnightblue;">
+        <a class="navbar-brand" href="#"><strong>Via</strong>Já! <i class="fas fa-shuttle-van"></i></a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav mr-auto">
+                <li class="nav-item">
+                    <a class="nav-link" type="button" data-bs-toggle="modal" data-bs-target="#modalSobre">Sobre</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" type="button" data-bs-toggle="modal" data-bs-target="#modalAvaliacao">Avaliação</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" type="button" data-bs-toggle="modal" data-bs-target="#modalDesenvolvedor">Desenvolvedor</a>
+                </li>
+            </ul>
+        </div>
+    </nav>
+    <section id="header" class="mt-5 p-5 text-white" style="background-color:midnightblue">
         <div class="row pb-5">
             <div class="col-12 text-left ">
                 <h1><strong>Via</strong>Já! <i class="fas fa-shuttle-van"></i></h1>
@@ -62,64 +82,10 @@
         </div>
     </section>
     <div class="container mt-5">
-        <div class="row mb-3">
-            <div class="col-md-4">
-                <button class="btn btn-sm btn-info btn-block" type="button" data-bs-toggle="collapse" data-bs-target="#cardSobre" aria-controls="cardSobre" aria-expanded="false">Sobre</button>
-            </div>
-            <div class="col-md-4">
-                <button class="btn btn-sm btn-info btn-block" type="button" data-bs-toggle="collapse" data-bs-target="#cardAvalie" aria-controls="cardAvalie" aria-expanded="false">Avalie</button>
-            </div>
-            <div class="col-md-4">
-                <button class="btn btn-sm btn-info btn-block" type="button" data-bs-toggle="collapse" data-bs-target="#cardDesenvolvedor" aria-controls="cardDesenvolvedor" aria-expanded="false">Desenvolvedor</button>
-            </div>
-        </div>
-        <div class="collapse multi-collapse" id="cardSobre">
-            <div class="card">
-                <div class="card-header">
-                    <h3 class="card-header">Sobre</h3>
-                </div>
-                <div class="card-body">
-                    <p> O ViaJá é um aplicativo Web que visa informar passageiros de transporte intermunicipal por topics sobre os horários, valores e locais de embarque dos veículos.</p>
-                    <p> Este aplicativo foi desenvolvido com o intuito de servir como trabalho de conclusão de curso(TCC).</p>
-                    <p>
-                        O aplicativo não tem qualquer ligação com cooperativas de
-                        transporte intermunicipal do estado do Ceará e todas as informações foram obtidas por meio de entrevista com motoristas. Os dados podem apresentar impreciões ou estarem incompletos.
-                    </p>
-                </div>
-            </div>
-        </div>
-        <div class="collapse multi-collapse" id="cardAvalie">
-            <div class="card">
-                <div class="card-header">
-                    <h3 class="card-header">Avaliação</h3>
-                </div>
-                <div class="card-body">
-                    <p>Ao final do uso do aplicativo, por favor, avalie a aplicação! É um processo rápido e irá me ajudar bastante!</p>
-                    <p>Para avaliar, entre no formulário <a href="https://docs.google.com/forms/d/13PXZ6ak3rjx44E3EVo1aa7QfKHNA47blD0IHojzPRD0/edit" target="_blank">clicando aqui.</a></p>
-                </div>
-            </div>
-        </div>
-        <div class="collapse multi-collapse" id="cardDesenvolvedor">
-            <div class="card ">
-                <div class="card-header">
-                    <h3 class="card-header">Desenvolvedor</h3>
-                </div>
-                <div class="card-body">
-                    <p>
-                        Olá! Primeiramente, fico muito agradecido por estar recebendo sua visita neste site e espero que goste da ferramenta. Me chamo Abraão Costa, sou sobralense e atualmente, aluno da graduação
-                        de engenharia da computação pela Universidade Federal do Ceará (UFC). Comecei a programar no início da graduação e atualmente trabalho como desenvolvedor fullstack. Vocês podem me encontrar nas
-                        seguintes redes sociais para ficarem atentos aos futuros projetos!
-                    </p>
-                    <a href="https://github.com/abraaocrl" target="_blank" style="font-size:2em;"><i class="fab fa-github"></i></a>
-                    <a href="https://www.linkedin.com/in/abraaocrl/" target="_blank" style="font-size:2em;"><i class="fab fa-linkedin"></i></a>
-                </div>
-            </div>
-        </div>
-
         <div class="loader mt-5" style="display:none;"></div>
 
         <div class="card mt-5 infoRotas">
-            <div class="card-header">
+            <div class="card-header" id="cardRotaDireta">
                 <span class="card-title">Rota direta</span>
             </div>
             <div class="card-body">
@@ -162,8 +128,81 @@
             </div>
         </div>
 
+        <div class="modal fade" id="modalSobre" tabindex="-1" role="dialog" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLongTitle">Sobre</h5>
+                        <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <p> O ViaJá é um aplicativo Web que visa informar passageiros de transporte intermunicipal por topics sobre os horários, valores e locais de embarque dos veículos.</p>
+                        <p> Este aplicativo foi desenvolvido com o intuito de servir como trabalho de conclusão de curso(TCC).</p>
+                        <p>
+                            O aplicativo não tem qualquer ligação com cooperativas de
+                            t    ransporte intermunicipal do estado do Ceará e todas as informações foram obtidas por meio de entrevista com motoristas. Os dados podem apresentar impreciões ou estarem incompletos.
+                        </p>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Entendi!</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="modal fade" id="modalAvaliacao" tabindex="-1" role="dialog" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLongTitle">Avaliação</h5>
+                        <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <p>Ao final do uso do aplicativo, por favor, avalie a aplicação! É um processo rápido e irá me ajudar bastante!</p>
+                        <p>Para avaliar, entre no formulário <a href="https://docs.google.com/forms/d/13PXZ6ak3rjx44E3EVo1aa7QfKHNA47blD0IHojzPRD0/edit" target="_blank">clicando aqui.</a></p>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Pode deixar!</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="modal fade" id="modalDesenvolvedor" tabindex="-1" role="dialog" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLongTitle">Desenvolvedor</h5>
+                        <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <p>
+                            Olá! Primeiramente, fico muito agradecido por estar recebendo sua visita neste site e espero que goste da ferramenta.
+                        </p>
+                        <p>
+                            Me chamo Abraão Costa, sou sobralense e atualmente, aluno da graduação
+                            de engenharia da computação pela Universidade Federal do Ceará (UFC). Comecei a programar no início da graduação e atualmente trabalho como desenvolvedor fullstack. Vocês podem me encontrar nas
+                            seguintes redes sociais para ficarem atentos aos futuros projetos!
+                        </p>
+                        <a href="https://github.com/abraaocrl" target="_blank" style="font-size:2em;"><i class="fab fa-github"></i></a>
+                        <a href="https://www.linkedin.com/in/abraaocrl/" target="_blank" style="font-size:2em;"><i class="fab fa-linkedin"></i></a>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Prazer!</button>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
-    <!-- /.login-box -->
+
+
+
     <!-- jQuery -->
     <script src="~/lib/jquery/jquery.min.js"></script>
 
@@ -252,6 +291,9 @@
                     })
 
                     $(".infoRotas").show();
+                    $("#cardRotaDireta")[0].scrollIntoView({
+                        behavior: 'smooth' // This will make the scroll smooth
+                    });
                 },
                 error: (err) => {
                     Swal.fire({
@@ -275,27 +317,27 @@
                     let horaHorario = horario.getUTCHours();
                     let horaMinuto = (horario.getUTCMinutes() < 10 ? '0' : '') + horario.getUTCMinutes();
                     htmlTabela += ` <tr>
-                                                                                        <td>
-                                                                                            <a class='btn btn-sm btn-link' target='blank' href='https://www.google.com/maps/search/?api=1&query=${item.rotaParada.latitude},${item.rotaParada.longitude}'>
-                                                                                                <i class="fas fa-map-marker-alt"></i>
-                                                                                            </a>
-                                                                                                <button class='btn btn-sm btn-link' onclick="AbrirModalPreco(${item.idRotaParada},${dados[index + 1].idRotaParada})">
-                                                                                                <i class="fas fa-money-bill-wave"></i>
-                                                                                            </button>
-                                                                                            ${item.rotaParada.cidade.nome}/${item.rotaParada.cidade.estado} - <strong>${horaHorario}:${horaMinuto}</strong>
-                                                                                        </td>`;
+                                                                                                        <td>
+                                                                                                            <a class='btn btn-sm btn-link' target='blank' href='https://www.google.com/maps/search/?api=1&query=${item.rotaParada.latitude},${item.rotaParada.longitude}'>
+                                                                                                                <i class="fas fa-map-marker-alt"></i>
+                                                                                                            </a>
+                                                                                                                <button class='btn btn-sm btn-link' onclick="AbrirModalPreco(${item.idRotaParada},${dados[index + 1].idRotaParada})">
+                                                                                                                <i class="fas fa-money-bill-wave"></i>
+                                                                                                            </button>
+                                                                                                            ${item.rotaParada.cidade.nome}/${item.rotaParada.cidade.estado} - <strong>${horaHorario}:${horaMinuto}</strong>
+                                                                                                        </td>`;
 
                     let horarioMillisecProximaParada = Date.parse(dados[index + 1].horario);
                     let horarioProximaParada = new Date(horarioMillisecProximaParada);
                     let horaHorarioProximaParada = horarioProximaParada.getUTCHours();
                     let horaMinutoProximaParada = (horarioProximaParada.getUTCMinutes() < 10 ? '0' : '') + horarioProximaParada.getUTCMinutes();
                     htmlTabela += `     <td>
-                                                                                            <a class='btn btn-sm btn-link' target='blank' href='https://www.google.com/maps/search/?api=1&query=${dados[index + 1].rotaParada.latitude},${dados[index + 1].rotaParada.longitude}'>
-                                                                                                <i class="fas fa-map-marker-alt"></i>
-                                                                                            </a>
-                                                                                            ${dados[index + 1].rotaParada.cidade.nome}/${dados[index + 1].rotaParada.cidade.estado} - <strong>${horaHorarioProximaParada}:${horaMinutoProximaParada}</strong>
-                                                                                        </td>
-                                                                                    </tr>`;
+                                                                                                            <a class='btn btn-sm btn-link' target='blank' href='https://www.google.com/maps/search/?api=1&query=${dados[index + 1].rotaParada.latitude},${dados[index + 1].rotaParada.longitude}'>
+                                                                                                                <i class="fas fa-map-marker-alt"></i>
+                                                                                                            </a>
+                                                                                                            ${dados[index + 1].rotaParada.cidade.nome}/${dados[index + 1].rotaParada.cidade.estado} - <strong>${horaHorarioProximaParada}:${horaMinutoProximaParada}</strong>
+                                                                                                        </td>
+                                                                                                    </tr>`;
                 }
             });
             htmlTabela += ` <tr><td> - </td><td> - </td></tr>`;

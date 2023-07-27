@@ -312,9 +312,9 @@
             $('#idRotaParadaDestino').val(idDestino);
 
             if (preco != undefined) {
-                $('#preco').val(preco.preco.replace('R$ ',''));
-                $('#distancia').val(preco.distancia.replace('R$ ',''));
-            }else{
+                $('#preco').val(preco.preco.replace('R$ ', ''));
+                $('#distancia').val(preco.distancia.replace('R$ ', ''));
+            } else {
                 $('#preco').val(null);
                 $('#distancia').val(null);
             }
@@ -431,7 +431,8 @@
 
                         let indexParadaComId = paradas.map(parada => parada.id).indexOf(idParadaGrupo);
 
-                        paradas[indexParadaComId].horarios = horarios;
+                        if (indexParadaComId > -1)
+                            paradas[indexParadaComId].horarios = horarios;
                     });
 
                     CarregarCardHorarios();
@@ -477,7 +478,7 @@
             var idRotaParadaOrigem = $('#idRotaParadaOrigem').val();
             var idRotaParadaDestino = $('#idRotaParadaDestino').val();
 
-            var preco = $('#preco').val().replaceAll('.','').replace(',','.');
+            var preco = $('#preco').val().replaceAll('.', '').replace(',', '.');
             var distancia = $('#distancia').val().replaceAll('.', '').replace(',', '.');;
 
             var rotaPreco = {
