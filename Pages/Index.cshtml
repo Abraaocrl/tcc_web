@@ -29,6 +29,8 @@
     <!-- SweetAlert2 -->
     <link rel="stylesheet" href="~/lib/sweetalert2/sweetalert2.css">
     <link rel="stylesheet" href="~/lib/sweetalert2-theme-bootstrap-4/bootstrap-4.min.css">
+
+    <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
     <!-- Theme style -->
     <link rel="stylesheet" href="~/css/adminlte.min.css">
 
@@ -36,9 +38,9 @@
 </head>
 <body>
     <nav class="navbar fixed-top navbar-expand-lg navbar-light bg-light" style="color:midnightblue;">
-        <a class="navbar-brand" href="#"><strong>Via</strong>Já! <i class="fas fa-shuttle-van"></i></a>
+        <a class="navbar-brand" href="#"><i class="fas fa-shuttle-van"></i><strong>Via</strong>Já! </a>
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
+            <span class="navbar-toggler-icon" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent"></span>
         </button>
 
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
@@ -58,21 +60,21 @@
     <section id="header" class="mt-5 p-5 text-white" style="background-color:midnightblue">
         <div class="row pb-5">
             <div class="col-12 text-left ">
-                <h1><strong>Via</strong>Já! <i class="fas fa-shuttle-van"></i></h1>
+                <h1><i class="fas fa-shuttle-van"></i><strong>Via</strong>Já!</h1>
                 <h3>Onde você precisa ir e aonde vai chegar</h3>
             </div>
         </div>
         <div class="row text-white">
             <div class="col-12 col-md-5">
                 <div class="form-group">
-                    <label for="cidade-origem">Onde você está?</label>
+                    <label for="cidade-origem">Onde você está? <i class="fas fa-info-circle tooltiped" title="Estão disponíveis para seleção apenas cidades que possuem horários disponíveis."></i></label>
                     <select class="form-control select2" id="cidade-origem"></select>
                 </div>
             </div>
             <div class="col-12 col-md-5">
                 <div class="form-group">
                     <label for="cidade-destino">Para onde você quer ir?</label>
-                    <select class="form-control select2" id="cidade-destino"></select>
+                    <select class="form-control select2" id="cidade-destino" disabled></select>
                 </div>
             </div>
             <div class="col-12 col-md-2">
@@ -86,7 +88,7 @@
 
         <div class="card mt-5 infoRotas">
             <div class="card-header" id="cardRotaDireta">
-                <span class="card-title">Rota direta</span>
+                <span class="card-title">Horários disponíveis <i class="fas fa-info-circle tooltiped" title="Alguns horários são estimativas, recomenda-se chegar antes do horário no local de embarque"></i></span>
             </div>
             <div class="card-body">
                 <div class="row">
@@ -105,7 +107,7 @@
                 </div>
             </div>
         </div>
-        <hr class="infoRotas" />
+        @*<hr class="infoRotas" />
         <div class="card infoRotas">
             <div class="card-header">
                 <span class="card-title">Rota completa</span>
@@ -126,7 +128,7 @@
                     </div>
                 </div>
             </div>
-        </div>
+        </div>*@
 
         <div class="modal fade" id="modalSobre" tabindex="-1" role="dialog" aria-hidden="true">
             <div class="modal-dialog modal-dialog-centered" role="document">
@@ -207,6 +209,8 @@
     <script src="~/lib/jquery/jquery.min.js"></script>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
+
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
     <!-- AdminLTE App -->
     <script src="~/js/adminlte.min.js"></script>
     <!-- Select2 -->
@@ -231,9 +235,69 @@
             });
         }
 
-        function CarregarCidades() {
+        function ConfigurarInputs() {
+            $("#cidade-origem").on("change", function () {
+                CarregaCidadesDestino();
+            });
+        }
+
+        //function CarregaCidadesOrigem() {
+        //    var cidadeDestino = $("#cidade-destino").select2('data')[0].id;
+        //    if (cidadeDestino > 0) {
+        //        CarregarCidadesAdjacentes("#cidade-origem", cidadeDestino)
+        //    } else {
+        //        CarregarCidades("#cidade-origem");
+        //    }
+        //}
+
+        function CarregaCidadesDestino() {
+            var cidadeOrigem = $("#cidade-origem").select2('data')[0].id;
+            if (cidadeOrigem > 0) {
+                CarregarCidadesAdjacentes("#cidade-destino", cidadeOrigem)
+                $("#cidade-destino").prop('disabled', false);
+            }else {
+                $("#cidade-destino").select2("val", "0");
+                $("#cidade-destino").prop('disabled', 'disabled');
+                //CarregarCidades("#cidade-destino");
+            }
+        }
+
+        function CarregarCidades(seletorInput) {
             $.ajax({
                 url: environment.api_url + "/Cidade",
+                dataType: "json",
+                contentType: "application/json",
+                success: (data) => {
+                    let opcoes = "<option value=0>--</option>";
+
+                    data.forEach((cidade, indice) => {
+                        let opcao = `<option value=${cidade.id}>${cidade.nome}</option>`;
+
+                        opcoes += opcao;
+                    });
+
+                    if (seletorInput != null) {
+                        $(seletorInput).html(opcoes);
+                    } else {
+                        $("#cidade-origem").html(opcoes);
+                        $("#cidade-destino").html(opcoes);
+                    }
+                },
+                error: (err) => {
+                    console.log(err);
+                    Swal.fire({
+                        title: "Erro na listagem de cidades!",
+                        text: "Tente novamente mais tarde.",
+                        icon: 'error',
+                        confirmButtonText: 'Ok',
+                    })
+                }
+            })
+        }
+
+        function CarregarCidadesAdjacentes(seletorInput, idCidade) {
+            $.ajax({
+                url: environment.api_url + "/Cidade/possuiCidade/" + idCidade,
                 dataType: "json",
                 contentType: "application/json",
                 success: (data) => {
@@ -245,8 +309,7 @@
                         opcoes += opcao;
                     });
 
-                    $("#cidade-origem").html(opcoes);
-                    $("#cidade-destino").html(opcoes);
+                    $(seletorInput).html(opcoes);
                 },
                 error: (err) => {
                     console.log(err);
@@ -285,7 +348,6 @@
                     $("#tabela-rotas-disponiveis>tbody").html("");
                     $("#tabela-rota-direta>tbody").html("");
                     data.forEach((rota) => {
-                        CarregaTabela(rota.rotaCompleta, "#tabela-rotas-disponiveis>tbody");
                         CarregaTabela(rota.rotaDireta, "#tabela-rota-direta>tbody");
 
                     })
@@ -317,27 +379,27 @@
                     let horaHorario = horario.getUTCHours();
                     let horaMinuto = (horario.getUTCMinutes() < 10 ? '0' : '') + horario.getUTCMinutes();
                     htmlTabela += ` <tr>
-                                                                                                        <td>
-                                                                                                            <a class='btn btn-sm btn-link' target='blank' href='https://www.google.com/maps/search/?api=1&query=${item.rotaParada.latitude},${item.rotaParada.longitude}'>
-                                                                                                                <i class="fas fa-map-marker-alt"></i>
-                                                                                                            </a>
-                                                                                                                <button class='btn btn-sm btn-link' onclick="AbrirModalPreco(${item.idRotaParada},${dados[index + 1].idRotaParada})">
-                                                                                                                <i class="fas fa-money-bill-wave"></i>
-                                                                                                            </button>
-                                                                                                            ${item.rotaParada.cidade.nome}/${item.rotaParada.cidade.estado} - <strong>${horaHorario}:${horaMinuto}</strong>
-                                                                                                        </td>`;
+                                                                                                                        <td>
+                                                                                                                            <a class='btn btn-sm btn-link' target='blank' href='https://www.google.com/maps/search/?api=1&query=${item.rotaParada.latitude},${item.rotaParada.longitude}'>
+                                                                                                                                <i class="fas fa-map-marker-alt"></i>
+                                                                                                                            </a>
+                                                                                                                                <button class='btn btn-sm btn-link' onclick="AbrirModalPreco(${item.idRotaParada},${dados[index + 1].idRotaParada})">
+                                                                                                                                <i class="fas fa-money-bill-wave"></i>
+                                                                                                                            </button>
+                                                                                                                            ${item.rotaParada.cidade.nome}/${item.rotaParada.cidade.estado} - <strong>${horaHorario}:${horaMinuto}</strong>
+                                                                                                                        </td>`;
 
                     let horarioMillisecProximaParada = Date.parse(dados[index + 1].horario);
                     let horarioProximaParada = new Date(horarioMillisecProximaParada);
                     let horaHorarioProximaParada = horarioProximaParada.getUTCHours();
                     let horaMinutoProximaParada = (horarioProximaParada.getUTCMinutes() < 10 ? '0' : '') + horarioProximaParada.getUTCMinutes();
                     htmlTabela += `     <td>
-                                                                                                            <a class='btn btn-sm btn-link' target='blank' href='https://www.google.com/maps/search/?api=1&query=${dados[index + 1].rotaParada.latitude},${dados[index + 1].rotaParada.longitude}'>
-                                                                                                                <i class="fas fa-map-marker-alt"></i>
-                                                                                                            </a>
-                                                                                                            ${dados[index + 1].rotaParada.cidade.nome}/${dados[index + 1].rotaParada.cidade.estado} - <strong>${horaHorarioProximaParada}:${horaMinutoProximaParada}</strong>
-                                                                                                        </td>
-                                                                                                    </tr>`;
+                                                                                                                            <a class='btn btn-sm btn-link' target='blank' href='https://www.google.com/maps/search/?api=1&query=${dados[index + 1].rotaParada.latitude},${dados[index + 1].rotaParada.longitude}'>
+                                                                                                                                <i class="fas fa-map-marker-alt"></i>
+                                                                                                                            </a>
+                                                                                                                            ${dados[index + 1].rotaParada.cidade.nome}/${dados[index + 1].rotaParada.cidade.estado} - <strong>${horaHorarioProximaParada}:${horaMinutoProximaParada}</strong>
+                                                                                                                        </td>
+                                                                                                                    </tr>`;
                 }
             });
             htmlTabela += ` <tr><td> - </td><td> - </td></tr>`;
@@ -388,8 +450,10 @@
         $(document).ready(() => {
             $(".infoRotas").hide();
             $(".select2").select2();
+            $(".tooltiped").tooltip();
 
             CarregarCidades();
+            ConfigurarInputs();
         })
     </script>
 </body>
