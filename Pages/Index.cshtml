@@ -88,7 +88,10 @@
 
         <div class="card mt-5 infoRotas">
             <div class="card-header" id="cardRotaDireta">
-                <span class="card-title">Horários disponíveis <i class="fas fa-info-circle tooltiped" title="Alguns horários são estimativas, recomenda-se chegar antes do horário no local de embarque"></i></span>
+                <span class="card-title my-1">Horários disponíveis <i class="fas fa-info-circle tooltiped" title="Alguns horários são estimativas, recomenda-se chegar antes do horário no local de embarque"></i></span>
+                <button class='btn btn-sm btn-info ml-3 tooltiped' id="btnConsultarPreco" title="Consultar preço da passagem">
+                    <strong>Valor</strong> <i class="fas fa-dollar-sign"></i>
+                </button>
             </div>
             <div class="card-body">
                 <div class="row">
@@ -380,12 +383,9 @@
                     let horaMinuto = (horario.getUTCMinutes() < 10 ? '0' : '') + horario.getUTCMinutes();
                     htmlTabela += ` <tr>
                                                                                                                         <td>
-                                                                                                                            <a class='btn btn-sm btn-link' target='blank' href='https://www.google.com/maps/search/?api=1&query=${item.rotaParada.latitude},${item.rotaParada.longitude}'>
+                                                                                                                            <a class='btn btn-sm btn-info tooltiped' title='Consultar local de embarque' target='blank' href='https://www.google.com/maps/search/?api=1&query=${item.rotaParada.latitude},${item.rotaParada.longitude}'>
                                                                                                                                 <i class="fas fa-map-marker-alt"></i>
                                                                                                                             </a>
-                                                                                                                                <button class='btn btn-sm btn-link' onclick="AbrirModalPreco(${item.idRotaParada},${dados[index + 1].idRotaParada})">
-                                                                                                                                <i class="fas fa-money-bill-wave"></i>
-                                                                                                                            </button>
                                                                                                                             ${item.rotaParada.cidade.nome}/${item.rotaParada.cidade.estado} - <strong>${horaHorario}:${horaMinuto}</strong>
                                                                                                                         </td>`;
 
@@ -394,7 +394,7 @@
                     let horaHorarioProximaParada = horarioProximaParada.getUTCHours();
                     let horaMinutoProximaParada = (horarioProximaParada.getUTCMinutes() < 10 ? '0' : '') + horarioProximaParada.getUTCMinutes();
                     htmlTabela += `     <td>
-                                                                                                                            <a class='btn btn-sm btn-link' target='blank' href='https://www.google.com/maps/search/?api=1&query=${dados[index + 1].rotaParada.latitude},${dados[index + 1].rotaParada.longitude}'>
+                                                                                                                            <a class='btn btn-sm btn-info tooltiped' title='Consultar local de desembarque' target='blank' href='https://www.google.com/maps/search/?api=1&query=${dados[index + 1].rotaParada.latitude},${dados[index + 1].rotaParada.longitude}'>
                                                                                                                                 <i class="fas fa-map-marker-alt"></i>
                                                                                                                             </a>
                                                                                                                             ${dados[index + 1].rotaParada.cidade.nome}/${dados[index + 1].rotaParada.cidade.estado} - <strong>${horaHorarioProximaParada}:${horaMinutoProximaParada}</strong>
@@ -404,6 +404,10 @@
             });
             htmlTabela += ` <tr><td> - </td><td> - </td></tr>`;
             $(seletor).html(htmlTabela);
+
+            $('#btnConsultarPreco').click(() => {
+                AbrirModalPreco(dados[0].idRotaParada,dados[1].idRotaParada)
+            });
         }
 
         function AbrirModalPreco(idRotaParadaOrigem, idRotaParadaDestino) {
@@ -429,7 +433,7 @@
                         })
                     } else {
                         Swal.fire({
-                            title: `Valor: R$ ${formattedNumber(parseFloat(data.preco))}`,
+                            title: `Valor: ${data.preco}`,
                             text: `${data.origem} -> ${data.distancia}km -> ${data.destino}`,
                             icon: 'info',
                             confirmButtonText: 'Ok'
